@@ -1,0 +1,12 @@
+<div class="span3">
+<h3 class="toright">New Info:</h3><br>
+</div>
+
+<%= form_for(@infopiece) do |f| %>
+	<div class="span5">
+		<%= f.text_area :content, :class => "newpiecefield", :rows => 1, :cols => 60 %>
+	</div>
+	<div class="span3">
+		<%= f.submit %>
+	</div>
+<% end %>

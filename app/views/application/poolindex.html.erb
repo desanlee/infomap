@@ -1,0 +1,25 @@
+
+<div class="row">
+	<% @infopieces.each do |infopiece| %>
+	<div class="span5 piece_container">
+		<div class="span4">
+			<div class="span toright">
+				<%= link_to 'e', edit_infopiece_path(infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %>
+				<%= link_to 'x', infopiece, method: :delete, data: { confirm: 'Are you sure?' } %>
+			</div>
+			<div class="span"><%= infopiece.created_at.to_date %></div>
+		
+			<%= form_for(@infolink) do |l| %>
+				<div class="span2 toright">
+					<%= l.hidden_field :topiece_id, :value => infopiece.id %>
+					<%= l.text_field :frompiece_id, :class => "linkfield toright" %>
+					<div class="actions">
+						<%= l.submit "R", :class => "btn btn-small toright" %>
+					</div>
+				</div>
+			<% end %>
+		</div>
+		<div class="span"><font class="label"><%= infopiece.id %></font> <%= infopiece.content %></div>
+	</div>
+	<% end %>
+</div>

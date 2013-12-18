@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @infopiece.user_id %>
+</p>
+
+<p>
+  <b>Content:</b>
+  <%= @infopiece.content %>
+</p>
+
+
+<%= link_to 'Edit', edit_infopiece_path(@infopiece) %> |
+<%= link_to 'Back', infopieces_path %>

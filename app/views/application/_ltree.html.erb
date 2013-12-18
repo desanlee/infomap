@@ -1,0 +1,41 @@
+<h3 class="center">Parent Items</h3>
+<% if @lpieces != nil then %>
+	<% @lpieces.each do |infopiece| %>
+		<div class="span2 info_area <%= 'selected_area' if infopiece == @current_linfo %>" >
+			<div class="label span toleft">
+				<%= link_to infopiece.id, {
+					controller: :application, 
+					action: :setcurrent, 
+					selectpiece: infopiece.id
+				} %>
+			</div>
+			<div class="span label toright">
+				<%= link_to 'e', edit_infopiece_path(infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %>
+				<%= link_to 'x', infopiece, method: :delete, data: { confirm: 'Are you sure?' } %>
+			</div>
+			<div class="span2"><%= infopiece.content %></div>
+		</div>
+	<% end %>
+
+	<% if @rootpieces != nil then %>
+		<% @rootpieces.each do |infopiece| %>
+		<div class="span2 info_area">
+			<% if ! @lpieces.include? infopiece then %>
+				<div class="span label toleft">
+					<%= link_to infopiece.id, {
+						controller: :application, 
+						action: :setcurrent, 
+						selectpiece: infopiece.id
+					} %>
+				</div>
+				<div class="span label toright">
+					<%= link_to 'e', edit_infopiece_path(infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %>
+					<%= link_to 'x', infopiece, method: :delete, data: { confirm: 'Are you sure?' } %>
+				</div>
+				<div class="span2"><%= infopiece.content %></div>
+			<% end %>
+		</div>
+		<% end %>
+	<% end %>
+	
+<% end %>

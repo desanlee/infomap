@@ -1,0 +1,25 @@
+<%= form_for(@infolink) do |f| %>
+  <% if @infolink.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@infolink.errors.count, "error") %> prohibited this infolink from being saved:</h2>
+
+      <ul>
+      <% @infolink.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :frompiece_id %><br />
+    <%= f.number_field :frompiece_id %>
+  </div>
+  <div class="field">
+    <%= f.label :topiece_id %><br />
+    <%= f.number_field :topiece_id%>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

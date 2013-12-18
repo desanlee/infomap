@@ -1,4 +1,20 @@
 Infomap::Application.routes.draw do
+
+  resources :infolinks
+  resources :infopieces
+
+
+  get "application/index"
+  get "application/treeindex"
+  get "application/poolindex"
+  get "application/setcurrent"
+
+  root to: "application#treeindex"
+  
+  devise_for :users
+  
+  resources :users
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

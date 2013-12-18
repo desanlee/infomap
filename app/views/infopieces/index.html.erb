@@ -1,0 +1,29 @@
+<h1>Listing infopieces</h1>
+
+<table>
+  <tr>
+	<th>ID</th>
+    <th>User</th>
+	<th>Lcount</th>
+	<th>Rcount</th>
+    <th>Content</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @infopieces.each do |infopiece| %>
+  <tr>
+	<td><%= infopiece.id %></td>
+    <td><%= infopiece.user_id %></td>
+	<td><%= infopiece.lcount %></td>
+	<td><%= infopiece.rcount %></td>
+    <td><%= infopiece.content %></td>
+    <td class="label"><%= link_to 'e', edit_infopiece_path(infopiece) %><%= link_to 'x', infopiece, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Infopiece', new_infopiece_path %>

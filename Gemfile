@@ -7,6 +7,15 @@ gem 'rails', '3.2.13'
 
 gem 'sqlite3'
 
+# Additional gems added by Jay
+
+gem 'bootstrap-sass', '2.0.0'
+gem 'devise', '2.2.6'
+gem 'execjs'
+gem 'will_paginate', '3.0.3'
+gem 'bootstrap-will_paginate', '0.0.6'
+gem 'paperclip'
+
 
 # Gems used only for assets and not required
 # in production environments by default.
