@@ -8,6 +8,7 @@ Infomap::Application.routes.draw do
   get "application/treeindex"
   get "application/poolindex"
   get "application/setcurrent"
+  match 'infolink/buildlink', :to => 'Infolinks#buildlink'
 
   root to: "application#treeindex"
   

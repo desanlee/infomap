@@ -1,0 +1,17 @@
+<tr><td>
+		<button class="btn btn-small btn-success" onmousedown=<%="startTo(" + @infopiece.id.to_s + ")" %> onmouseup=<%="linkTo(" + @infopiece.id.to_s + ")" %> ></button>
+	</td>
+	<td class="minitext">
+		<%= link_to 'e', edit_infopiece_path(@infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %>
+	</td><td class="minitext">
+		<%= link_to 'x', @infopiece, method: :delete, data: { confirm: 'Are you sure?' } %>
+	</td>
+	<td class="minitext"><%= @infopiece.lcount %></td>
+	<td class="minitext"><%= @infopiece.rcount %></td>
+	<td class="minitext"><%= @infopiece.created_at.to_date %></td>
+	<td>
+		<button class="btn btn-small btn-warning" onmousedown=<%="startFrom(" + @infopiece.id.to_s + ")" %> onmouseup=<%="belongTo(" + @infopiece.id.to_s + ")" %> ></button>
+	</td>
+	</div>
+</tr>
+		

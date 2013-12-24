@@ -9,15 +9,39 @@
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
   </head>
+  
   <body>
+  <script type="text/javascript" language="javascript">
+  
+  fromId = 0
+  toId = 0
+  
+  function startFrom(id) {
+	fromId = id;
+  }
+  function linkTo(id) {
+	if (fromId > 0 && fromId != id) {
+		window.location.href="/infolink/buildlink?frominfoid=" + fromId + "&toinfoid=" + id;
+	}
+  }
+  function startTo(id) {
+    toId = id;
+  }
+  function belongTo(id) {
+    if (toId > 0 && toId != id) {
+		window.location.href="/infolink/buildlink?frominfoid=" + id + "&toinfoid=" + toId;
+	}
+  }
+  function choseInfo(cid, pid) {
+	window.location.href="/application/setcurrent?selectpiece=" + cid + "&parentpiece=" + pid;
+  }
+  
+  </script>
+  
     <header class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
-        <div class="container">
+        <div class="container-fluid">
           <%= link_to "INFO-MAP", '#', id: "logo" %>
-                 <% if current_user %><div class="span">
-                    <%= link_to "OnMap", '/application/treeindex', class: "btn" %>
-					<%= link_to "Outsider", '/application/poolindex' , class: "btn" %>
-                 </div><% end %>
             <ul class="nav pull-right">
                          <% if current_user %>
                                 <li><%= link_to current_user.email, user_path(current_user), :onclick=>"window.open(this.href,'create_company', 'height=650, width=800');return false;" %></li>
@@ -34,15 +58,16 @@
       </div>
     </header>
 	
-    <header class="navbar container newpiece_container">
-		<%= render '/infopieces/new' %>
-	</header>
-	
     <div class="container">
-<!----------
+
+<!-----------------		
+		session test:<%= session[:test] %><br>
 		session cpiece:<%= session[:cpiece] %><br>
 		session lpiece:<%= session[:lpiece] %><br>
---------->
+		@current_cinfo:<%= @current_cinfo.id if @current_cinfo != nil %><br>
+		@current_linfo:<%= @current_linfo.id if @current_linfo != nil %><br>
+--------------------->
+
       <%= yield %>
     </div>
   </body>

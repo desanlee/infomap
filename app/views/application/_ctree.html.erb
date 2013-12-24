@@ -1,22 +1,14 @@
-<h3 class="center">Current Items</h3>
 <% if @clinks != nil then %>
+	<table class="span5">
 	<% @clinks.each do |infolink| %>
-		<% infopiece = infolink.topiece %>
-		<div class="span6 info_area <%= 'selected_area' if infolink.topiece == @current_cinfo %>" >
-			<div class="span label">
-				<%= link_to infopiece.id, {
-					controller: :application, 
-					action: :setcurrent, 
-					selectpiece: infopiece.id,
-					parentpiece: @current_linfo.id
-				} %>
-			</div>
-			<div class="span label toright">
-				<%= link_to 'e', edit_infopiece_path(infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %>
-				<%= link_to 'x', infopiece, method: :delete, data: { confirm: 'Are you sure?' } %>
-				<%= link_to 'c', infolink, method: :delete, data: {confirm: 'Break the link?'} %>
-			</div>
-			<div class="span"><%= infopiece.content %></div>
-		</div>
+		<% @infopiece = infolink.topiece %>
+		<%= render "infopiece" %>
+		<tr><td colspan="6" onclick=<%="choseInfo(" + @infopiece.id.to_s + "," + @current_linfo.id.to_s + ")"%> >
+				<div class="info_area <%= 'selected_area' if @infopiece == @current_cinfo %>" ><%= @infopiece.content %></div>
+		</td>
+		<td>
+			<%= link_to 'c', infolink, method: :delete, data: { confirm: 'Sure to unlink?' } %>
+		</td></tr>
 	<% end %>
+	</table>
 <% end %>

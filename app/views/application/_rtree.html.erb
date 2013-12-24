@@ -1,22 +1,14 @@
-<h3 class="center">Child Items</h3>
 <% if @rlinks != nil then %>
+	<table class="span4">
 	<% @rlinks.each do |infolink| %>
-		<% infopiece = infolink.topiece %>
-		<div class="span3 info_area selected_area">
-			<div class="span label">
-				<%= link_to infopiece.id, {
-					controller: :application, 
-					action: :setcurrent, 
-					selectpiece: infopiece.id,
-					parentpiece: @current_cinfo.id
-				} %>
-			</div>
-			<div class="span label toright">
-				<%= link_to 'e', edit_infopiece_path(infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %>
-				<%= link_to 'x', infopiece, method: :delete, data: { confirm: 'Are you sure?' } %>
-				<%= link_to 'c', infolink, method: :delete, data: {confirm: 'Break the link?'} %>
-			</div>
-			<div class="span"><%= infopiece.content %></div>
-		</div>
+		<% @infopiece = infolink.topiece %>
+		<%= render "infopiece" %>
+		<tr><td colspan="6"  onclick=<%="choseInfo(" + @infopiece.id.to_s + "," + @current_cinfo.id.to_s + ")"%>>
+				<div class="info_area selected_area normaltext" ><%= @infopiece.content %></div>
+		</td>
+		<td>
+			<%= link_to 'c', infolink, method: :delete, data: { confirm: 'Sure to unlink?' } %>
+		</td></tr>
 	<% end %>
+	</table>
 <% end %>

@@ -22,6 +22,15 @@ class InfolinksController < ApplicationController
     @infolink = Infolink.find(params[:id])
   end
 
+  def updatelinkcount(from, to)
+	frominfo = Infopiece.find_by_id(from)
+	toinfo = Infopiece.find_by_id(to)
+	frominfo.rcount += 1 if frominfo != nil
+	toinfo.lcount += 1 if toinfo != nil
+	frominfo.save if frominfo != nil
+	toinfo.save if toinfo != nil
+  end
+  
   # POST /infolinks
   # POST /infolinks.json
   def create
@@ -30,18 +39,26 @@ class InfolinksController < ApplicationController
     respond_to do |format|
       if @infolink.save
 		# Update reference count
-		frominfo = Infopiece.find_by_id(@infolink.frompiece_id)
-		toinfo = Infopiece.find_by_id(@infolink.topiece_id)
-		frominfo.rcount += 1 if frominfo != nil
-		toinfo.lcount += 1 if toinfo != nil
-		frominfo.save
-		toinfo.save
+		updatelinkcount(@infolink.frompiece_id, @infolink.topiece_id)
 		
         format.html { redirect_to :back, notice: 'Infolink was successfully created.' }
       else
         format.html { render action: "new" }
       end
     end
+  end
+  
+  # GET
+  def buildlink
+	@infolink = Infolink.new
+	@infolink.frompiece_id = params[:frominfoid]
+	@infolink.topiece_id = params[:toinfoid]
+	
+	if @infolink.save
+		# Update reference count
+		updatelinkcount(@infolink.frompiece_id, @infolink.topiece_id)
+	end
+	redirect_to root_path
   end
 
   # PUT /infolinks/1
@@ -68,8 +85,8 @@ class InfolinksController < ApplicationController
 	toinfo = Infopiece.find_by_id(@infolink.topiece_id)
 	frominfo.rcount -= 1 if frominfo != nil
 	toinfo.lcount -= 1 if toinfo != nil
-	frominfo.save
-	toinfo.save
+	frominfo.save if frominfo != nil
+	toinfo.save if frominfo != nil
 		
     @infolink.destroy
 	

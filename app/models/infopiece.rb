@@ -1,5 +1,5 @@
 class Infopiece < ActiveRecord::Base
-  attr_accessible :content, :user_id
+  attr_accessible :content, :user_id, :lcount, :rcount
   
   belongs_to :user
   
@@ -8,5 +8,14 @@ class Infopiece < ActiveRecord::Base
   
   has_many :topieces, :through => :tolinks, :source => :topiece
   has_many :frompieces, :through => :fromlinks, :source => :frompiece
+  
+  default_scope order: 'infopieces.created_at DESC'
+  
+  def briefcontent
+	if self.content.length < 20 then return self.content
+	else
+		return self.content.slice(0,20) + "..."
+	end
+  end
   
 end
