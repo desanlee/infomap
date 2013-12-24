@@ -20,6 +20,7 @@ class InfopiecesController < ApplicationController
   # GET /infopieces/1/edit
   def edit
     @infopiece = Infopiece.find(params[:id])
+	render :layout => "justapage"
   end
 
   # POST /infopieces

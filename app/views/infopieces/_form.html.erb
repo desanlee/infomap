@@ -11,15 +11,8 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :user_id %><br />
-    <%= f.number_field :user_id %>
-  </div>
-  <div class="field">
-    <%= f.label :content %><br />
-    <%= f.text_field :content %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="span6 offset1">
+    <%= f.text_area :content, :class => "newpiecefield", :rows => 18, :cols => 400 %>
+    <%= f.submit "OK"%>
   </div>
 <% end %>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>INFO-MAP - Take care of your info of mess!</title>
+    <%= stylesheet_link_tag "application", media: "all" %>
+    <%= javascript_include_tag "application" %>
+        <%= javascript_include_tag "defaults" %>
+        <%= javascript_include_tag "prototype" %>
+    <%= csrf_meta_tags %>
+    <!--[if lt IE 9]>
+<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+
+  <body>
+    <div class="container">
+      <%= yield %>
+    </div>
+  </body>
+
+</html>
