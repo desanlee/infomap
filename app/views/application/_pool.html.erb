@@ -1,38 +1,21 @@
 <div class="row">
 
-<table class="span4 poolinfo">
-	<tr>
-	<%= form_for(@infopiece) do |f| %>
-		<td class="center">
-			<%= f.text_area :content, :class => "newpiecefield", :rows => 2, :cols => 60 %>
-		</td><td>
-			<%= f.submit "add", :class => "btn btn-small btn-danger" %>
-		</td>
-	<% end %>
-	</tr>
-</table>
+	<table class="span4 poolinfo">
+		<tr>
+		<%= form_for(@infopiece) do |f| %>
+			<td class="center">
+				<%= f.text_area :content, :class => "newpiecefield", :rows => 2, :cols => 60 %>
+			</td><td>
+				<%= f.submit "add", :class => "btn btn-small btn-danger" %>
+			</td>
+		<% end %>
+		</tr>
+	</table>
 		
 	<% @infopieces.each do |infopiece| %>
 		<table class="span2 poolinfo">
-			<tr>
-			<td>
-				<button class="btn btn-small btn-success" onmousedown=<%="startTo(" + infopiece.id.to_s + ")" %> onmouseup=<%="linkTo(" + infopiece.id.to_s + ")" %> ></button>
-			</td>
-			<td>
-				<div class="minitext">
-				<%= link_to 'e', edit_infopiece_path(infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %>
-				<%= link_to 'x', infopiece, method: :delete, data: { confirm: 'Are you sure?' } %>
-				</div>
-			</td>
-			<td><div class="minitext"><%= infopiece.created_at.to_date %></div></td>
-			<td>
-				<button class="btn btn-small btn-warning" onmousedown=<%="startFrom(" + infopiece.id.to_s + ")" %> onmouseup=<%="belongTo(" + infopiece.id.to_s + ")" %> ></button>
-			</td></tr>
-			<tr><td colspan="4">
-				<div class="smalltext">
-					<%= infopiece.briefcontent %>
-				</div>
-			</td></tr>
+			<% @briefinfopiece = infopiece %>
+			<%= render "briefinfopiece" %>
 		</table>
 	<% end %>
 </div>

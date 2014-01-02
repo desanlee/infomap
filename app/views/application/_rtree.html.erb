@@ -1,14 +1,10 @@
 <% if @rlinks != nil then %>
-	<table class="span4">
+	
 	<% @rlinks.each do |infolink| %>
-		<% @infopiece = infolink.topiece %>
+		<% @infopiece = infolink %>
+		<table class="span4 table-bordered infotable">
 		<%= render "infopiece" %>
-		<tr><td colspan="6"  onclick=<%="choseInfo(" + @infopiece.id.to_s + "," + @current_cinfo.id.to_s + ")"%>>
-				<div class="info_area selected_area normaltext" ><%= @infopiece.content %></div>
-		</td>
-		<td>
-			<%= link_to 'c', infolink, method: :delete, data: { confirm: 'Sure to unlink?' } %>
-		</td></tr>
-	<% end %>
 	</table>
+	<% end %>
+	
 <% end %>

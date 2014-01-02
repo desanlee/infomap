@@ -1,14 +1,10 @@
 <% if @clinks != nil then %>
-	<table class="span5">
+	
 	<% @clinks.each do |infolink| %>
-		<% @infopiece = infolink.topiece %>
+		<% @infopiece = infolink %>
+		<table class="span5 table-bordered infotable">
 		<%= render "infopiece" %>
-		<tr><td colspan="6" onclick=<%="choseInfo(" + @infopiece.id.to_s + "," + @current_linfo.id.to_s + ")"%> >
-				<div class="info_area <%= 'selected_area' if @infopiece == @current_cinfo %>" ><%= @infopiece.content %></div>
-		</td>
-		<td>
-			<%= link_to 'c', infolink, method: :delete, data: { confirm: 'Sure to unlink?' } %>
-		</td></tr>
+		</table>
 	<% end %>
-	</table>
+	
 <% end %>

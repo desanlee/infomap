@@ -61,6 +61,22 @@ class InfolinksController < ApplicationController
 	redirect_to root_path
   end
 
+  def movelink
+	@infolink = Infolink.new
+	@infolink.frompiece_id = params[:frominfoid]
+	@infolink.topiece_id = params[:toinfoid]
+	@breaklinkid = params[:breaklinkid]
+	@breaklink = nil
+	@breaklink = Infolink.find_by_id(@breaklinkid) if @breaklinkid != 0
+	
+	if @infolink.save
+		# Update reference count
+		updatelinkcount(@infolink.frompiece_id, @infolink.topiece_id)
+		@breaklink.destroy if @breaklink != nil
+	end
+	redirect_to root_path
+  end
+  
   # PUT /infolinks/1
   # PUT /infolinks/1.json
   def update
@@ -81,16 +97,21 @@ class InfolinksController < ApplicationController
     @infolink = Infolink.find(params[:id])
 	
 	# Update reference count
-	frominfo = Infopiece.find_by_id(@infolink.frompiece_id)
-	toinfo = Infopiece.find_by_id(@infolink.topiece_id)
-	frominfo.rcount -= 1 if frominfo != nil
-	toinfo.lcount -= 1 if toinfo != nil
-	frominfo.save if frominfo != nil
-	toinfo.save if frominfo != nil
+	deducecount @infolink
 		
     @infolink.destroy
 	
 	redirect_to :back
 
   end
+  
+  def deducecount infolink
+	frominfo = Infopiece.find_by_id(infolink.frompiece_id)
+	toinfo = Infopiece.find_by_id(infolink.topiece_id)
+	frominfo.rcount -= 1 if frominfo != nil
+	toinfo.lcount -= 1 if toinfo != nil
+	frominfo.save if frominfo != nil
+	toinfo.save if frominfo != nil
+  end
+  
 end

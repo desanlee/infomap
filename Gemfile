@@ -9,7 +9,7 @@ gem 'sqlite3'
 
 # Additional gems added by Jay
 
-gem 'bootstrap-sass', '2.0.0'
+gem 'bootstrap-sass', '2.3.2'
 gem 'devise', '2.2.6'
 gem 'execjs'
 gem 'will_paginate', '3.0.3'

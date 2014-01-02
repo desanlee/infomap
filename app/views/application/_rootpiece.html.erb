@@ -1,0 +1,38 @@
+<tr>
+	<td>
+		<button 
+			class="btn btn-mini" 
+			onmousedown=<%="moveFrom(0," + @infopiece.id.to_s + ")" %> >
+			<i class="icon-hand-right"></i>			
+		</button>
+	</td>
+	<td class="minitext center" onclick=<%="choseInfo(" + @infopiece.id.to_s  + ")"%>>
+		Link to:<%= @infopiece.rcount %> ,
+		<%= @infopiece.created_at.to_date %>
+	</td><td>
+		<div class="btn-group">
+			<a data-toggle="dropdown" href="#"><span class="caret"></span></a>
+			<ul class="dropdown-menu">
+			<li><%= link_to content_tag('i', nil, class: "icon-pencil") + " Edit", edit_infopiece_path(@infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %></li>
+			<li><%= link_to  content_tag('i', nil, class: "icon-trash") + " Delete", @infopiece, method: :delete, data: { confirm: 'Sure to unlink?' } %></li>
+			</ul>
+		</div>
+	</td>
+	<td>
+		<button 
+			class="btn btn-mini toright" 
+			onmousedown=<%="refFrom(" + @infopiece.id.to_s + ")" %> 
+			 >
+			<i class=" icon-resize-horizontal"></i>
+		</button>
+	</td>
+</tr>
+<tr>
+	<td colspan="4">
+		<div 
+			class="info_area" 
+			onmouseup=<%="endTo(" + @infopiece.id.to_s + ")" %> >
+			<%= @infopiece.briefcontent %>
+		</div>
+	</td>
+</tr>

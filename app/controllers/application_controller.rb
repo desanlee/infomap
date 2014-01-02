@@ -13,43 +13,32 @@ class ApplicationController < ActionController::Base
     @infopiece = Infopiece.new
 	@infolink = Infolink.new
 	
-	# determin what is current info selected as central and left one
-	if session[:cpiece] != nil then
-		if session[:lpiece] == 0 then	
-			# Select from central or right lane 
-			@current_linfo = Infopiece.find_by_id(session[:lpiece])
-			@current_cinfo = Infopiece.find_by_id(session[:cpiece])
-			session[:test] = 11111 
-		elsif Infopiece.find_by_id(session[:cpiece]).frompieces.empty?	
-			# Select info from left lane as current info and no more left info existed
-			@current_linfo = Infopiece.find_by_id(session[:cpiece])
-			@current_cinfo = @current_linfo.topieces.first
-			session[:lpiece] = @current_linfo.id
-			session[:cpiece] = @current_cinfo.id
-			session[:test] = 222222 
-		else
-			# select info from left lane as current info and have more left info existed
-			if Infopiece.find_by_id(session[:cpiece]).frompieces != nil then
-				@current_cinfo = Infopiece.find_by_id(session[:cpiece])
-				@current_linfo = @current_cinfo.frompieces.first 
-				session[:lpiece] = @current_linfo.id
-			end
-			session[:test] = 333333 
-		end
-	end
-	
-	if @current_cinfo == nil then
-		if @current_linfo == nil then
-			@current_linfo = current_user.infopieces.find(:first, :conditions => "lcount=0")
-		end
-		@current_cinfo = @current_linfo.topieces.first if @current_linfo.topieces != nil
-		session[:cpiece] = @current_cinfo.id if @current_cinfo != nil
-	end
-	
-	# calculate the infopiece list for each cols
-	@lpieces = @current_cinfo.frompieces if @current_cinfo != nil
 	@rootpieces = current_user.infopieces.find(:all, :conditions => "lcount=0 and rcount!=0")
 	
+	@current_cinfo = Infopiece.find_by_id(session[:cpiece]) if session[:cpiece] != nil
+	@current_cinfo = @rootpieces.first if @current_cinfo == nil
+	if ! @current_cinfo.frompieces.empty? then
+		# selected info is not a root
+		@current_linfo = @current_cinfo.frompieces.first 
+		session[:test] = 11
+	else
+		# selected info is a root
+		@current_linfo = @current_cinfo
+		@current_cinfo = @current_linfo.topieces.first if !@current_linfo.topieces.empty?
+		session[:cpiece] = @current_cinfo.id
+		session[:test] = 22
+	end
+	@rootpieces = @rootpieces - [ @current_linfo ] if @current_linfo != nil
+	
+	@lpieces = @current_cinfo.frompieces if @current_cinfo != nil
+	
+	@llinks = Array.new
+	@lpieces.each do |p| 
+		tmplink = Infolink.new
+		tmplink.frompiece_id = 0
+		tmplink.topiece_id = p.id
+		@llinks << tmplink
+	end
 	@rlinks = @current_cinfo.tolinks if @current_cinfo != nil
 	@clinks = @current_linfo.tolinks if @current_linfo != nil
 	
@@ -61,7 +50,6 @@ class ApplicationController < ActionController::Base
   
   def setcurrent
 	session[:cpiece] = params[:selectpiece]
-	session[:lpiece] = params[:parentpiece]
 	
 	redirect_to root_path
   end

@@ -5,33 +5,46 @@
         <%= javascript_include_tag "defaults" %>
         <%= javascript_include_tag "prototype" %>
     <%= csrf_meta_tags %>
-    <!--[if lt IE 9]>
-<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 </head>
   
   <body>
   <script type="text/javascript" language="javascript">
   
+  linkId = 0
   fromId = 0
   toId = 0
   
-  function startFrom(id) {
-	fromId = id;
+  function moveFrom(linkid, infoid) {
+	// move info to new place, break original link
+	linkId = linkid;
+    toId = infoid;
+	fromId = 0;
   }
-  function linkTo(id) {
-	if (fromId > 0 && fromId != id) {
+  function refFrom(id) {
+	// reference new info, add new link
+	fromId = id;
+	toId = 0;
+  }
+  function endTo(id) {
+	//alert("endto from "+ toId + "to" + id + ", break link:" + linkId );
+	if (toId == 0 && fromId == 0) {return;}
+	
+	if (fromId == 0) {
+		// this is a move operation
+		if (toId == id) {return;}
+		//alert("move from "+ toId + "to" + id + ", break link:" + linkId );
+		window.location.href="/infolink/movelink?frominfoid=" + id + "&toinfoid=" + toId + "&breaklinkid=" + linkId;
+	} else if (toId == 0) {
+		//this is a reference operation
+		if (fromId == id) {return;}
+		//alert("reference from " + fromId + " to" + id);
 		window.location.href="/infolink/buildlink?frominfoid=" + fromId + "&toinfoid=" + id;
 	}
   }
-  function startTo(id) {
-    toId = id;
-  }
-  function belongTo(id) {
-    if (toId > 0 && toId != id) {
-		window.location.href="/infolink/buildlink?frominfoid=" + id + "&toinfoid=" + toId;
-	}
-  }
+  
   function choseInfo(cid, pid) {
 	window.location.href="/application/setcurrent?selectpiece=" + cid + "&parentpiece=" + pid;
   }
@@ -42,6 +55,14 @@
       <div class="navbar-inner">
         <div class="container-fluid">
           <%= link_to "INFO-MAP", '#', id: "logo" %>
+			<div class="btn-group">
+				<a data-toggle="dropdown" href="#"><span class="icon-comment icon-white"></span></a>
+				<ul class="dropdown-menu">
+				<li class="divider"></li>
+				<li><a href="#"><i class="i"></i> Make admin</a></li>
+				</ul>
+			</div>
+			
             <ul class="nav pull-right">
                          <% if current_user %>
                                 <li><%= link_to current_user.email, user_path(current_user), :onclick=>"window.open(this.href,'create_company', 'height=650, width=800');return false;" %></li>
@@ -67,7 +88,7 @@
 		@current_cinfo:<%= @current_cinfo.id if @current_cinfo != nil %><br>
 		@current_linfo:<%= @current_linfo.id if @current_linfo != nil %><br>
 --------------------->
-
+	
       <%= yield %>
     </div>
   </body>

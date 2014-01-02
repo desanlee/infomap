@@ -1,26 +1,27 @@
-
-<% if @lpieces != nil then if !@lpieces.empty? then%>
-	<table class="span3">
-	<% @lpieces.each do |infopiece| %>
-		<% @infopiece = infopiece %>
-		<%= render "infopiece" %>
-		<tr><td colspan="7"  onclick=<%="choseInfo(" + infopiece.id.to_s + ",0)"%>>
-				<div class="info_area <%= 'selected_area' if infopiece == @current_linfo %>" ><%= infopiece.content %></div>
-		</td></tr>
+<% if @llinks != nil then if !@llinks.empty? then%>
+	
+	<% @llinks.each do |infolink| %>
+		<% @infopiece = infolink %>
+		<table class="span3 table-bordered infotable">
+			<%= render "infopiece" %>
+		</table>
+	<br> 
 	<% end %>
-	<tr><td><br></td></tr>
-	</table>
+	
 <% end end %>
 
 <!------------ Show other root info pieces------------->
+<br>
+<hr>
+<span class="label label-success center"> &nbsp ROOT INFO <i class=" icon-arrow-down icon-white"></i></span>
+
 <% if @rootpieces != nil then %>	
-	<table class="span3 label">
 	<% @rootpieces.each do |infopiece| %>
+	<table class="span3 infotable">
 		<% @infopiece = infopiece %>
-		<%= render "infopiece" %>
-		<tr><td colspan="7"  onclick=<%="choseInfo(" + infopiece.id.to_s + ",0)"%>>
-				<div class="info_area %>" ><%= infopiece.briefcontent %></div>
-		</td></tr>
-	<% end %>
+		<%= render "rootpiece" %>
 	</table>
+	<br> 
+	<% end %>
+	
 <% end %>

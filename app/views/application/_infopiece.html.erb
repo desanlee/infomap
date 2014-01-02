@@ -1,17 +1,50 @@
-<tr><td>
-		<button class="btn btn-small btn-success" onmousedown=<%="startTo(" + @infopiece.id.to_s + ")" %> onmouseup=<%="linkTo(" + @infopiece.id.to_s + ")" %> ></button>
+<% @infolink = @infopiece %>
+<% @infopiece = @infolink.topiece %>
+<tr>
+	<td class="<%= 
+				'selected_area' if 
+					@infopiece == @current_cinfo or 
+					@infopiece == @current_linfo
+				%> minitext center">
+		<button 
+			class="btn btn-mini toleft" 
+			onmousedown=<%="moveFrom(" + @infolink.id.to_s + "," + @infopiece.id.to_s + ")" %> 
+			onclick=<%="choseInfo(" + @infopiece.id.to_s  + ")"%> >
+			<i class="icon-hand-right"></i>			
+		</button>
+		<<%= @infopiece.lcount %> ,
+		<%= @infopiece.rcount %>> ,
+		<%= @infopiece.created_at.to_date %>
+		<div class="btn-group">
+			<a data-toggle="dropdown" href="#"><span class="caret"></span></a>
+			<ul class="dropdown-menu">
+			<li><%= link_to content_tag('i', nil, class: "icon-pencil") + " Edit", edit_infopiece_path(@infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %></li>
+			<li><%= link_to  content_tag('i', nil, class: "icon-trash") + " Delete", @infopiece, method: :delete, data: { confirm: 'Sure to delete?' } %></li>
+			<% if @infolink.frompiece_id != 0 then %>
+				<li><%= link_to  content_tag('i', nil, class: "icon-remove") + " Unlink", @infolink, method: :delete, data: { confirm: 'Sure to unlink?' } %></li>
+			<% end %>
+			<li class="divider"></li>
+			<li><a href="#"><i class="i"></i> Make admin</a></li>
+			</ul>
+		</div>
+		<button 
+			class="btn btn-mini toright" 
+			onmousedown=<%="refFrom(" + @infopiece.id.to_s + ")" %> 
+			 >
+			<i class=" icon-resize-horizontal"></i>
+		</button>
 	</td>
-	<td class="minitext">
-		<%= link_to 'e', edit_infopiece_path(@infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %>
-	</td><td class="minitext">
-		<%= link_to 'x', @infopiece, method: :delete, data: { confirm: 'Are you sure?' } %>
-	</td>
-	<td class="minitext"><%= @infopiece.lcount %></td>
-	<td class="minitext"><%= @infopiece.rcount %></td>
-	<td class="minitext"><%= @infopiece.created_at.to_date %></td>
-	<td>
-		<button class="btn btn-small btn-warning" onmousedown=<%="startFrom(" + @infopiece.id.to_s + ")" %> onmouseup=<%="belongTo(" + @infopiece.id.to_s + ")" %> ></button>
-	</td>
-	</div>
 </tr>
-		
+<tr class=" <%= 
+				'selected_area' if 
+					@infopiece == @current_cinfo or 
+					@infopiece == @current_linfo
+				%>" >
+	<td  colspan="3" style="word-break:break-all">
+		<div 
+			class="info_area" 
+			onmouseup=<%="endTo(" + @infopiece.id.to_s + ")" %> >
+			<%= @infopiece.content %>
+		</div>
+	</td>
+</tr>

@@ -14,8 +14,8 @@ class Infopiece < ActiveRecord::Base
   def briefcontent
 	if self.content.length < 20 then return self.content
 	else
-		return self.content.slice(0,20) + "..."
+		return self.content.slice(0,16) + "..."
 	end
   end
-  
+
 end

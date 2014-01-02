@@ -12,6 +12,8 @@
   <% end %>
 
   <div class="span6 offset1">
+	lcount:<%= f.number_field :lcount%><br>
+	rcount:<%= f.number_field :rcount%>
     <%= f.text_area :content, :class => "newpiecefield", :rows => 18, :cols => 400 %>
     <%= f.submit "OK"%>
   </div>

@@ -1,3 +1,82 @@
 // Place all the styles related to the Infopieces controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.newpiece_container {
+  padding-top: 5px;
+  background-color: WhiteSmoke;
+  border: 1px solid;
+  color: #999;
+}
+
+.piece_container {
+  margin-left: 50px;
+  margin-top: 10px;
+  padding: 6px;
+  background-color: AliceBlue;
+  border: 1px solid;
+}
+
+.newpiecefield {
+  width: 240px;
+  height: 50px;
+}
+
+.infotable {
+  margin-left: 0px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.info_area {
+	padding: 2px;
+	font-size: 1.0em;
+}
+
+.briefinfo_area {
+	padding: 2px;
+	font-size: 0.8em;
+}
+
+.selected_area {
+	margin-bottom: 10px;
+	background-color: khaki;
+	font-size: 1.2em;
+}
+
+.bordered {
+	border: 1px solid;
+}
+
+.linkfield {
+	font-size: 0.7em;
+	maxlength: 4;
+	background-color: WhiteSmoke;
+	width: 30px;
+	height: 25px;
+	size: 5;
+	placeholder: "Make an offer ";
+	maxlength: 5 
+}
+
+.poolinfo {
+  margin-top: 10px;
+  background-color: AliceBlue;
+}
+
+.minitext {
+  font-size: 0.5em;
+  color: DarkGrey
+}
+
+.smalltext {
+  font-size: 0.8em;
+}
+
+.normaltext {
+  font-size: 1em;
+}
+
+.bigtext {
+  font-size: 1.2em;
+}

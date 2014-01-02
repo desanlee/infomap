@@ -9,7 +9,8 @@ Infomap::Application.routes.draw do
   get "application/poolindex"
   get "application/setcurrent"
   match 'infolink/buildlink', :to => 'Infolinks#buildlink'
-
+  match 'infolink/movelink', :to => 'Infolinks#movelink'
+  
   root to: "application#treeindex"
   
   devise_for :users
