@@ -3,25 +3,30 @@
 		<%= render "pool" %>
 	</div>
 	<div class="span12">
-	<div class="row">
-	<!--
-		<div class="span12">
-			current_linfo: <%= @current_linfo.id if @current_linfo != nil%><br>
-			current_cinfo: <%= @current_cinfo.id if @current_cinfo != nil%>
+		<div class="row">
+		<!--
+			<div class="span12">
+				current_linfo: <%= @current_linfo.id if @current_linfo != nil%><br>
+				current_cinfo: <%= @current_cinfo.id if @current_cinfo != nil%>
+			</div>
+		-->
+		<hr>
+			<div class="span3">
+				<%= render "ltree" %>
+			</div>
+			<% if @current_cinfo.rcount == 0 then %>
+				<div class="span9">
+					<%= render "ctree" %>
+				</div>
+			<% else %>
+				<div class="span5">
+					<%= render "ctree" %>
+				</div>
+				<div class="span4 ">
+					<%= render "rtree" %>
+				</div>
+			<% end %>
+				
 		</div>
-	-->
-	<hr>
-		<div class="span3">
-			<%= render "ltree" %>
-		</div>
-
-		<div class="span5 ">
-			<%= render "ctree" %>
-		</div>
-
-		<div class="span4 ">
-			<%= render "rtree" %>
-		</div>
-	</div>
 	</div>
 </div>

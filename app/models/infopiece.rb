@@ -12,10 +12,14 @@ class Infopiece < ActiveRecord::Base
   default_scope order: 'infopieces.created_at DESC'
   
   def briefcontent
-	if self.content.length < 20 then return self.content
+	if self.content.length < 23 then return self.content
 	else
-		return self.content.slice(0,16) + "..."
+		return self.content.slice(0,23) + "..."
 	end
+  end
+  
+  def htmlcontent
+	return self.content.gsub("\r\n",'<br>').gsub("\r",'<br>')
   end
 
 end

@@ -8,13 +8,16 @@
 				%> minitext center">
 		<button 
 			class="btn btn-mini toleft" 
+			onclick="drawarrow()"
 			onmousedown=<%="moveFrom(" + @infolink.id.to_s + "," + @infopiece.id.to_s + ")" %> 
-			onclick=<%="choseInfo(" + @infopiece.id.to_s  + ")"%> >
+		>
 			<i class="icon-hand-right"></i>			
 		</button>
-		<<%= @infopiece.lcount %> ,
-		<%= @infopiece.rcount %>> ,
-		<%= @infopiece.created_at.to_date %>
+		<span onclick=<%="choseInfo(" + @infopiece.id.to_s  + ")"%> >
+			<<%= @infopiece.lcount %> ,
+			<%= @infopiece.rcount %>> ,
+			<%= @infopiece.created_at.to_date %>
+		</span>
 		<div class="btn-group">
 			<a data-toggle="dropdown" href="#"><span class="caret"></span></a>
 			<ul class="dropdown-menu">
@@ -44,7 +47,7 @@
 		<div 
 			class="info_area" 
 			onmouseup=<%="endTo(" + @infopiece.id.to_s + ")" %> >
-			<%= @infopiece.content %>
+			<%= simple_format(@infopiece.content) %>
 		</div>
 	</td>
 </tr>

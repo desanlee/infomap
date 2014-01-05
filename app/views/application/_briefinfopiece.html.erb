@@ -12,7 +12,9 @@
 			<li><%= link_to content_tag('i', nil, class: "icon-pencil") + " Edit", edit_infopiece_path(@briefinfopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %></li>
 			<li><%= link_to  content_tag('i', nil, class: "icon-trash") + " Delete", @briefinfopiece, method: :delete, data: { confirm: 'Sure to delete?' } %></li>
 			<li class="divider"></li>
-			<li><%= @briefinfopiece.content %></li>
+			<table><tr><td>
+				<div class="span4 info_area"><%= @briefinfopiece.content %></div>
+			</td></tr></table>
 			</ul>
 		</div>
 	</td>
