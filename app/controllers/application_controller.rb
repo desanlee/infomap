@@ -44,10 +44,6 @@ class ApplicationController < ActionController::Base
 	
   end
   
-  def poolindex
-
-  end
-  
   def setcurrent
 	session[:cpiece] = params[:selectpiece]
 	

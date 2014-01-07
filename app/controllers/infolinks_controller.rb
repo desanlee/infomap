@@ -48,16 +48,22 @@ class InfolinksController < ApplicationController
     end
   end
   
-  # GET
-  def buildlink
+  def linkup fromid, toid
 	@infolink = Infolink.new
-	@infolink.frompiece_id = params[:frominfoid]
-	@infolink.topiece_id = params[:toinfoid]
+	@infolink.frompiece_id = fromid
+	@infolink.topiece_id = toid
 	
 	if @infolink.save
 		# Update reference count
 		updatelinkcount(@infolink.frompiece_id, @infolink.topiece_id)
 	end
+  end
+  
+  # GET
+  def buildlink
+	fid = params[:frominfoid]
+	tid = params[:toinfoid]
+	linkup(fid, tid)
 	redirect_to root_path
   end
 
@@ -97,7 +103,7 @@ class InfolinksController < ApplicationController
     @infolink = Infolink.find(params[:id])
 	
 	# Update reference count
-	deducecount @infolink
+	# deducecount @infolink
 		
     @infolink.destroy
 	

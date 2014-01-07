@@ -14,7 +14,8 @@ class InfopiecesController < ApplicationController
   # GET /infopieces/new
   def new
     @infopiece = Infopiece.new
-
+	@parentpiece = Infopiece.find(params[:id])
+	render :layout => "justapage"
   end
 
   # GET /infopieces/1/edit
