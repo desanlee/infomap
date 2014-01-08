@@ -14,7 +14,7 @@ class InfopiecesController < ApplicationController
   # GET /infopieces/new
   def new
     @infopiece = Infopiece.new
-	@parentpiece = Infopiece.find(params[:id])
+	@infopiece.lcount = params[:id]
 	render :layout => "justapage"
   end
 
@@ -28,11 +28,27 @@ class InfopiecesController < ApplicationController
   def create
     @infopiece = Infopiece.new(params[:infopiece])
 	@infopiece.user_id = current_user.id
+	newlink = nil
+	parentpiece = nil
+	if @infopiece.lcount != nil then
+		parentpiece = Infopiece.find(@infopiece.lcount)
+		newlink = Infolink.new
+		newlink.frompiece_id = @infopiece.lcount
+	end
+	
 	@infopiece.lcount = 0
 	@infopiece.rcount = 0
 	
     respond_to do |format|
       if @infopiece.save
+		if newlink then
+			newlink.topiece_id = @infopiece.id
+			newlink.save
+			@infopiece.lcount += 1
+			parentpiece.rcount += 1
+			@infopiece.save
+			parentpiece.save
+		end
         format.html { redirect_to :back, notice: 'Infopiece was successfully created.' }
         format.json { render json: @infopiece, status: :created, location: @infopiece }
       else
@@ -40,6 +56,7 @@ class InfopiecesController < ApplicationController
         format.json { render json: @infopiece.errors, status: :unprocessable_entity }
       end
     end
+	
   end
 
   # PUT /infopieces/1

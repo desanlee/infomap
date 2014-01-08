@@ -1,5 +1,3 @@
-<h1>New infopiece</h1>
-
 <%= form_for(@infopiece) do |f| %>
   <% if @infopiece.errors.any? %>
     <div id="error_explanation">
@@ -13,17 +11,7 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :user_id %><br />
-    <%= f.number_field :user_id %>
-  </div>
-  <div class="field">
-    <%= f.label :content %><br />
-    <%= f.text_field :content %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  <%= f.hidden_field :lcount %>
+    <%= f.text_area :content, :class => "newpiecefield", :rows => 48, :cols => 400 %>
+  <%= f.submit %>
 <% end %>
-
-<%= link_to 'Back', infopieces_path %>
