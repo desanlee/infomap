@@ -1,0 +1,8 @@
+
+<% if @infotree != nil then %>	
+	<% @infotree.each do |infopiece| %>
+		<% @infopiece = infopiece %>
+		<%= render "rootpiece" %>
+	<% end %>
+	
+<% end %>

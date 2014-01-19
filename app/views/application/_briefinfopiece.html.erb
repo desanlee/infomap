@@ -21,7 +21,7 @@
 </tr>
 <tr height="42px">
 	<td colspan="2">
-		<div class="briefinfo_area" onmouseup=<%="endTo(" + @briefinfopiece.id.to_s + ")" %> >
+		<div class="briefinfo_area" data-toggle="tooltip" title="<%= @briefinfopiece.content %>" onmouseup=<%="endTo(" + @briefinfopiece.id.to_s + ")" %> >
 			<%= @briefinfopiece.briefcontent %>
 		</div>
 	</td>

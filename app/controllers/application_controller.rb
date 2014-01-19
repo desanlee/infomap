@@ -7,13 +7,54 @@ class ApplicationController < ActionController::Base
     @infopieces = current_user.infopieces.all
   end
   
+  def switchexpansion
+	infoid = params[:infoid]
+	infoarray = Array.new
+	if session[:expandinfo] != nil then
+		infoarray = session[:expandinfo].split
+		if infoarray.include? infoid then
+			infoarray.delete infoid
+		else
+			infoarray << infoid
+		end
+		session[:expandinfo] = infoarray.uniq.join(" ") 
+	else
+		session[:expandinfo] = infoid.to_s
+	end
+	redirect_to root_path
+  end
+  
+  def removeexpansion
+	infoid = params[:infoid]
+	redirect_to root_path
+  end
+  
+  def buildroottree infoarray,deepth
+    @expandinfo = Array.new
+	infotree = Array.new
+	return infotree if infoarray == nil
+	@expandinfo = session[:expandinfo].split if session[:expandinfo] != nil 
+	infoarray.each do |info|
+		newhash = Hash.new
+		newhash = {deepth: deepth, content: info}
+		infotree << newhash
+		if @expandinfo.include? info.id.to_s then
+			infotree = infotree + buildroottree(info.topieces, deepth+1)
+		end
+	end
+	
+	return infotree
+  end
+  
   def treeindex
     
 	@infopieces = current_user.infopieces.find(:all, :conditions => " lcount=0 and rcount=0")
     @infopiece = Infopiece.new
 	@infolink = Infolink.new
 	
+	
 	@rootpieces = current_user.infopieces.find(:all, :conditions => "lcount=0 and rcount!=0")
+	@infotree = buildroottree(@rootpieces, 0)
 	
 	@current_cinfo = Infopiece.find_by_id(session[:cpiece]) if session[:cpiece] != nil
 	@current_cinfo = @rootpieces.first if @current_cinfo == nil
@@ -28,7 +69,6 @@ class ApplicationController < ActionController::Base
 		session[:cpiece] = @current_cinfo.id
 		session[:test] = 22
 	end
-	@rootpieces = @rootpieces - [ @current_linfo ] if @current_linfo != nil
 	
 	@lpieces = @current_cinfo.frompieces if @current_cinfo != nil
 	

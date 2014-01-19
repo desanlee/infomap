@@ -49,6 +49,10 @@
   function choseInfo(cid, pid) {
 	window.location.href="/application/setcurrent?selectpiece=" + cid + "&parentpiece=" + pid;
   }
+  
+  function expandInfo(infoid) {
+	window.location.href="/application/switchexpansion?infoid=" + infoid;
+  }
 /*  
   function drawarrow() {
 	var canvas = document.getElementById('canvas');
@@ -95,32 +99,27 @@
         </div>
       </div>
     </header>
-	<canvas id="canvas" style="position:absolute;z-index:-1" width="1600" height="1200" >
-	</canvas>
-    <div class="container">
+	<% if current_user then %>
+		<canvas id="canvas" style="position:absolute;z-index:-1" width="1600" height="1200" >
+		</canvas>
+		<div><%= render "pool" %></div>
+		<div class="span" data-spy="affix" style="overflow:auto; height: 500px; width: 100%">
+			<%= render "application/roottree" %>
+		</div>
+	<% end %>
+    <div class="container toright">
 
-<!-----------------		
+<!--------------------
+		session expandinfo:<%= session[:expandinfo] %><br>
 		session test:<%= session[:test] %><br>
 		session cpiece:<%= session[:cpiece] %><br>
 		session lpiece:<%= session[:lpiece] %><br>
 		@current_cinfo:<%= @current_cinfo.id if @current_cinfo != nil %><br>
 		@current_linfo:<%= @current_linfo.id if @current_linfo != nil %><br>
---------------------->
+----------------------->
 	
       <%= yield %>
     </div>
   </body>
-  
-  <footer class="footer">
-         <small>
-                by ji.x.li@oracle.com
-         </small>
-         <nav>
-                <ul>
-                 <li><%= link_to "About", '#' %></li>
-                 <li><%= link_to "Contact", '#' %></li>
-                </ul>
-         </nav>
-  </footer>
 
 </html>

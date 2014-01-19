@@ -9,19 +9,3 @@
 	<% end %>
 	
 <% end end %>
-
-<!------------ Show other root info pieces------------->
-<br>
-<hr>
-<span class="label label-success center"> &nbsp ROOT INFO <i class=" icon-arrow-down icon-white"></i></span>
-
-<% if @rootpieces != nil then %>	
-	<% @rootpieces.each do |infopiece| %>
-	<table class="span3 infotable">
-		<% @infopiece = infopiece %>
-		<%= render "rootpiece" %>
-	</table>
-	<br> 
-	<% end %>
-	
-<% end %>

@@ -12,9 +12,16 @@ class Infopiece < ActiveRecord::Base
   default_scope order: 'infopieces.created_at DESC'
   
   def briefcontent
-	if self.content.length < 23 then return self.content
+	if self.content.length <= 23 then return self.content
 	else
 		return self.content.slice(0,23) + "..."
+	end
+  end
+  
+  def shortcontent
+  	if self.content.length <= 16 then return self.content
+	else
+		return self.content.slice(0,16) + "..."
 	end
   end
   
