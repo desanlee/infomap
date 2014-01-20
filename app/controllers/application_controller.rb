@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
   def treeindex
     
 	@infopieces = current_user.infopieces.find(:all, :conditions => " lcount=0 and rcount=0")
-    @infopiece = Infopiece.new
+    @newinfopiece = Infopiece.new
 	@infolink = Infolink.new
 	
 	
