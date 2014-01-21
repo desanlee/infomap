@@ -22,6 +22,7 @@
 			<a data-toggle="dropdown" href="#"><span class="caret"></span></a>
 			<ul class="dropdown-menu">
 			<li><%= link_to content_tag('i', nil, class: "icon-plus") + " New", infopiece_path(@infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %></li>
+			<li><a href="#Modal<%=@infopiece.id%>" data-toggle="modal"><i class="icon-plus"></i> New</a></li>
 			<li><%= link_to content_tag('i', nil, class: "icon-pencil") + " Edit", edit_infopiece_path(@infopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %></li>
 			<li><%= link_to  content_tag('i', nil, class: "icon-trash") + " Delete", @infopiece, method: :delete, data: { confirm: 'Sure to delete?' } %></li>
 			<% if @infolink.frompiece_id != 0 then %>
@@ -52,3 +53,19 @@
 		</div>
 	</td>
 </tr>
+
+ 
+<!-- Modal -->
+<div id="Modal<%=@infopiece.id%>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+		<h3 id="myModalLabel">Modal <%=@infopiece.id%></h3>
+	</div>
+	<div class="modal-body">
+		<p>One fine body</p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">close</button>
+		<button class="btn btn-primary">Save changes</button>
+	</div>
+</div>
