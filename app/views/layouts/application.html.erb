@@ -14,9 +14,16 @@
   
   <script type="text/javascript" language="javascript">
   
+  function switchpoolstatus() {
+	$.get("/application/switchpoolstatus",function(){
+		// alert("Switched Pool Status");
+	});
+  }
+  
   linkId = 0
   fromId = 0
   toId = 0
+  indexFromId = 0
   
   function moveFrom(linkid, infoid) {
 	// move info to new place, break original link
@@ -24,27 +31,50 @@
     toId = infoid;
 	fromId = 0;
   }
+  function moveIndexFrom(linkid) {
+	indexFromId = linkid;
+  }
   function refFrom(id) {
 	// reference new info, add new link
 	fromId = id;
 	toId = 0;
   }
-  function endTo(id) {
-	//alert("endto from "+ toId + "to" + id + ", break link:" + linkId );
-	if (toId == 0 && fromId == 0) {return;}
-	
-	if (fromId == 0) {
+  function endTo(id, tolinkid) {
+	//alert("endTo");
+	if (fromId == id || indexFromId == tolinkid) {
+		linkId = 0
+		fromId = 0
+		toId = 0
+		indexFromId = 0
+		return
+	}
+	if ( indexFromId > 0) {
+		// this is switch operation
+		//alert("switch from "+ indexFromId + "to" + tolinkid );
+		window.location.href="/infolink/switchlink?indexfromid=" + indexFromId + "&indextoid=" + tolinkid;
+	}
+	else if (fromId == 0) {
 		// this is a move operation
-		if (toId == id) {return;}
+		if(toId == 0 || id == 0) {
+			linkId = 0
+			fromId = 0
+			toId = 0
+			indexFromId = 0
+			return
+		}
 		//alert("move from "+ toId + "to" + id + ", break link:" + linkId );
 		window.location.href="/infolink/movelink?frominfoid=" + id + "&toinfoid=" + toId + "&breaklinkid=" + linkId;
 	} else if (toId == 0) {
 		//this is a reference operation
-		if (fromId == id) {return;}
 		//alert("reference from " + fromId + " to" + id);
 		window.location.href="/infolink/buildlink?frominfoid=" + fromId + "&toinfoid=" + id;
 	}
+	linkId = 0
+	fromId = 0
+	toId = 0
+	indexFromId = 0
   }
+
   
   function choseInfo(cid, pid) {
 	window.location.href="/application/setcurrent?selectpiece=" + cid + "&parentpiece=" + pid;
@@ -113,6 +143,7 @@
     <div class="container toright">
 
 <!--------------------
+
 		session expandinfo:<%= session[:expandinfo] %><br>
 		session test:<%= session[:test] %><br>
 		session cpiece:<%= session[:cpiece] %><br>

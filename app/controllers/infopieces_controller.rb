@@ -44,6 +44,9 @@ class InfopiecesController < ApplicationController
 		if newlink then
 			newlink.topiece_id = @infopiece.id
 			newlink.save
+			newlink.index_id = newlink.created_at
+			newlink.save
+			
 			@infopiece.lcount += 1
 			parentpiece.rcount += 1
 			@infopiece.save
@@ -65,7 +68,7 @@ class InfopiecesController < ApplicationController
 
     respond_to do |format|
       if @infopiece.update_attributes(params[:infopiece])
-        format.html { redirect_to @infopiece, notice: 'Infopiece was successfully updated.' }
+        format.html { redirect_to :back, notice: 'Infopiece was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

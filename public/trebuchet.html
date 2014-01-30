@@ -1,0 +1,231 @@
+<html>
+   <head>
+      <title>Trebuchet Demo</title>
+	  <script type="text/javascript" src="/physics_game/Box2dWeb-2.1.a.3.js"></script>
+	  <script type="text/javascript" src="/physics_game/materials.js"></script>
+	  <script type="text/javascript" src="/physics_game/trebuchet.js"></script>
+   </head>
+   <body onload="init();">
+      <canvas id="canvas" width="1000" height="400" style="background-color:#333333;" ></canvas>
+   </body>
+   
+   <script type="text/javascript">
+      
+	  var scale = 4;
+	  var scaleflag = false;
+	  var dowblescaleflag = false;
+	  var wwidth = 1000; var wheight = 400;
+	  var angle = 225;
+	  
+	  var canvas = document.getElementById('canvas');
+	  var ctx=canvas.getContext("2d");
+	  ctx.font="20px Georgia";
+	  
+      function init() {
+		 scaleflag = false;
+	  
+         var world = new b2World(
+               new b2Vec2(0, 10)    //gravity
+            ,  true                 //allow sleep
+         );
+
+		 var worldSize = new b2Vec2(wwidth, wheight);
+		 
+		 treb = buildTreb(world, new b2Vec2(3, (wheight) / 30)); 
+					
+         //create ground
+         fixDef.shape = new b2PolygonShape;
+		 //define horizon
+         fixDef.shape.SetAsBox(10000 / 30, 0.1);
+		 bodyDef.position.Set(0, worldSize.y / 30);
+		 world.CreateBody(bodyDef).CreateFixture(fixDef);
+		 
+         /////////////////////////////////////////////////////////////////////////
+         //setup debug draw
+		 
+         var debugDraw = new b2DebugDraw();
+			debugDraw.SetSprite(document.getElementById("canvas").getContext("2d"));
+			debugDraw.SetDrawScale(30.0);
+			debugDraw.SetFillAlpha(0.5);
+			debugDraw.SetLineThickness(1.0);
+//			debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
+			debugDraw.SetFlags(b2DebugDraw.e_shapeBit);
+			world.SetDebugDraw(debugDraw);
+         
+		 
+         window.setInterval(update, 1000 / 60);
+         
+		 //keyboard
+		 var keyU, keyD, keyL, keyR;
+		 
+		 document.addEventListener("keydown", function(e){			
+			switch (e.keyCode) {
+				case 37 :
+					keyL=true;
+					break;
+				case 38 :
+					keyU=true;
+					break;
+				case 39 :
+					keyR=true;
+					break;
+			}
+		 });
+		 
+         document.addEventListener("keyup", function(e){			
+			switch (e.keyCode) {
+				case 37 :
+					keyL=false;
+					break;
+				case 38 :
+					keyU=false;
+					break;
+				case 39 :
+					keyR=false;
+					break;
+			}
+		 });
+		 
+         //mouse
+         var mouseX, mouseY, mousePVec, isMouseDown, selectedBody, mouseJoint;
+         var canvasPosition = getElementPosition(document.getElementById("canvas"));
+
+         document.addEventListener("mousedown", function(e) {
+            isMouseDown = true;
+            handleMouseMove(e);
+            document.addEventListener("mousemove", handleMouseMove, true);
+         }, true);
+         
+         document.addEventListener("mouseup", function() {
+            document.removeEventListener("mousemove", handleMouseMove, true);
+            isMouseDown = false;
+            mouseX = undefined;
+            mouseY = undefined;
+         }, true);
+         
+         function handleMouseMove(e) {
+            mouseX = (e.clientX - canvasPosition.x) / 30;
+            mouseY = (e.clientY - canvasPosition.y) / 30;
+         };
+         
+         function getBodyAtMouse() {
+            mousePVec = new b2Vec2(mouseX, mouseY);
+            var aabb = new b2AABB();
+            aabb.lowerBound.Set(mouseX - 0.001, mouseY - 0.001);
+            aabb.upperBound.Set(mouseX + 0.001, mouseY + 0.001);
+            
+            // Query the world for overlapping shapes.
+
+            selectedBody = null;
+            world.QueryAABB(getBodyCB, aabb);
+            return selectedBody;
+         }
+		
+         function getBodyCB(fixture) {
+            if(fixture.GetBody().GetType() != b2Body.b2_staticBody) {
+               if(fixture.GetShape().TestPoint(fixture.GetBody().GetTransform(), mousePVec)) {
+                  selectedBody = fixture.GetBody();
+                  return false;
+               }
+            }
+            return true;
+         }
+         
+         //update
+         var bodycount = 0;
+         function update() {
+			if(hand.GetAngle() * 180/3.14 > angle) {
+				world.DestroyJoint(handPower);
+			}
+			if((hand.GetPosition().y < 0 || hand.GetPosition().x > 30 )&& scaleflag == false) {
+				scaleflag = true;
+				debugDraw.SetDrawScale(30/scale);
+				np = new b2Vec2;
+				for(var b = world.GetBodyList(); b != null; b = b.GetNext()){
+					bodycount += 1;
+					np.SetV(b.GetPosition());
+					np.y = np.y + (wheight / 30) * (scale - 1);
+					b.SetPosition(np);	
+				}
+			}
+			
+			if(keyL) {
+				//treb.ApplyForce(new b2Vec2(0,-100), treb.GetWorldCenter());
+				world.DestroyJoint(handPower);
+			}
+			if(keyU) {
+				rockerCtl.ApplyForce(new b2Vec2(150,-150), rockerCtl.GetWorldCenter());
+			}
+			if(keyR) {
+				//treb.ApplyForce(new b2Vec2(0,-1000), treb.GetWorldCenter());
+			}			
+            if(isMouseDown && (!mouseJoint)) {
+               var body = getBodyAtMouse();
+               if(body) {
+                  var md = new b2MouseJointDef();
+                  md.bodyA = world.GetGroundBody();
+                  md.bodyB = body;
+                  md.target.Set(mouseX, mouseY);
+                  md.collideConnected = true;
+                  md.maxForce = 300.0 * body.GetMass();
+                  mouseJoint = world.CreateJoint(md);
+                  body.SetAwake(true);
+               }
+            }
+            
+            if(mouseJoint) {
+               if(isMouseDown) {
+                  mouseJoint.SetTarget(new b2Vec2(mouseX, mouseY));
+               } else {
+                  world.DestroyJoint(mouseJoint);
+                  mouseJoint = null;
+               }
+            }
+			
+            world.Step(1 / 60, 10, 10);
+            world.DrawDebugData();
+			
+			ctx.fillText("I Like This Game! ",10,50);
+			for(var b = world.GetBodyList(); b != null; b = b.GetNext()){
+				if (b.GetPosition().x > 10 ) {
+					np.SetV(b.GetPosition());
+					ctx.fillText( Math.floor(np.x) + " Meters",np.x * 30 / scale, np.y * 30 / scale);	
+				}
+			}
+				
+            world.ClearForces();
+         };
+         
+         //helpers
+         
+         //http://js-tut.aardon.de/js-tut/tutorial/position.html
+         function getElementPosition(element) {
+            var elem=element, tagname="", x=0, y=0;
+           
+            while((typeof(elem) == "object") && (typeof(elem.tagName) != "undefined")) {
+               y += elem.offsetTop;
+               x += elem.offsetLeft;
+               tagname = elem.tagName.toUpperCase();
+
+               if(tagname == "BODY")
+                  elem=0;
+
+               if(typeof(elem) == "object") {
+                  if(typeof(elem.offsetParent) == "object")
+                     elem = elem.offsetParent;
+               }
+            }
+            return {x: x, y: y};
+         }
+
+
+      };
+   
+   </script>
+   
+   <div id="assets" style="display:none">
+        <img id="crate" src="crate.jpg" />
+    </div>
+				
+   
+</html>

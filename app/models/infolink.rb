@@ -1,8 +1,10 @@
 class Infolink < ActiveRecord::Base
-  attr_accessible :frompiece_id, :topiece_id
+  attr_accessible :frompiece_id, :topiece_id, :index_id
   
   belongs_to :frompiece, :class_name => "Infopiece", :foreign_key => :frompiece_id
   belongs_to :topiece, :class_name => "Infopiece", :foreign_key => :topiece_id
+  
+  default_scope order: 'infolinks.index_id ASC'
   
   def destroy
   	frominfo = Infopiece.find_by_id(self.frompiece_id)

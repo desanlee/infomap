@@ -40,7 +40,8 @@ class InfolinksController < ApplicationController
       if @infolink.save
 		# Update reference count
 		updatelinkcount(@infolink.frompiece_id, @infolink.topiece_id)
-		
+		@infolink.index_id = @infolink.created_at
+		@infolink.save
         format.html { redirect_to :back, notice: 'Infolink was successfully created.' }
       else
         format.html { render action: "new" }
@@ -56,6 +57,8 @@ class InfolinksController < ApplicationController
 	if @infolink.save
 		# Update reference count
 		updatelinkcount(@infolink.frompiece_id, @infolink.topiece_id)
+		@infolink.index_id = @infolink.created_at
+		@infolink.save
 	end
   end
   
@@ -79,6 +82,23 @@ class InfolinksController < ApplicationController
 		# Update reference count
 		updatelinkcount(@infolink.frompiece_id, @infolink.topiece_id)
 		@breaklink.destroy if @breaklink != nil
+		@infolink.index_id = @infolink.created_at
+		@infolink.save
+	end
+	redirect_to root_path
+  end
+  
+  def switchlink
+	fid = params[:indexfromid]
+	tid = params[:indextoid]
+	flink = Infolink.find_by_id(fid) if fid != nil
+	tlink = Infolink.find_by_id(tid) if tid != nil
+	if(flink != nil && tlink != nil)
+		tmp = flink.index_id
+		flink.index_id = tlink.index_id
+		tlink.index_id = tmp
+		flink.save
+		tlink.save
 	end
 	redirect_to root_path
   end

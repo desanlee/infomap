@@ -7,6 +7,15 @@ class ApplicationController < ActionController::Base
     @infopieces = current_user.infopieces.all
   end
   
+  def switchpoolstatus
+	if session[:poolstatus] != "in" then
+		session[:poolstatus] = "in"
+	else
+		session[:poolstatus] = " "
+	end
+	redirect_to root_path
+  end
+  
   def switchexpansion
 	infoid = params[:infoid]
 	infoarray = Array.new
@@ -82,6 +91,7 @@ class ApplicationController < ActionController::Base
 	@rlinks = @current_cinfo.tolinks if @current_cinfo != nil
 	@clinks = @current_linfo.tolinks if @current_linfo != nil
 	
+
   end
   
   def setcurrent

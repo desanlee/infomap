@@ -11,8 +11,10 @@ Infomap::Application.routes.draw do
   get "application/poolindex"
   get "application/setcurrent"
   get "application/switchexpansion"
+  get "application/switchpoolstatus"
   match 'infolink/buildlink', :to => 'Infolinks#buildlink'
   match 'infolink/movelink', :to => 'Infolinks#movelink'
+  match 'infolink/switchlink', :to => 'Infolinks#switchlink'
   
   root to: "application#treeindex"
   

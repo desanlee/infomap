@@ -2,6 +2,8 @@
 
 <table>
   <tr>
+	<th>ID</th>
+    <th>Index</th>
     <th>Frompiece</th>
     <th>Topiece</th>
     <th></th>
@@ -11,6 +13,8 @@
 
 <% @infolinks.each do |infolink| %>
   <tr>
+	<td><%= infolink.id %></td>
+	<td><%= infolink.index_id %></td>
     <td><%= infolink.frompiece_id %></td>
     <td><%= infolink.topiece_id %></td>
     <td><%= link_to 'Show', infolink %></td>

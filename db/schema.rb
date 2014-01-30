@@ -11,13 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131209143942) do
+ActiveRecord::Schema.define(:version => 20140126090521) do
 
   create_table "infolinks", :force => true do |t|
     t.integer  "frompiece_id"
     t.integer  "topiece_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.integer  "index_id"
   end
 
   create_table "infopieces", :force => true do |t|
