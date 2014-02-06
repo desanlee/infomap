@@ -1,0 +1,28 @@
+<tr>
+	<td class="minitext" colspan="3">
+		<button 
+			class="btn-hidden" 
+			onmousedown=<%="moveFrom(0," + @briefinfopiece.id.to_s + ")" %> >
+			<i class="icon-hand-right"></i>			
+		</button>
+		<%= @briefinfopiece.created_at.to_date %>
+		<div class="btn-group">
+			<a data-toggle="dropdown" href="#"><span class="caret"></span></a>
+			<ul class="dropdown-menu">
+			<li><%= link_to content_tag('i', nil, class: "icon-pencil") + " Edit", edit_infopiece_path(@briefinfopiece),:onclick=>"window.open(this.href,'create_company', 'height=800, width=600');return false;" %></li>
+			<li><%= link_to  content_tag('i', nil, class: "icon-trash") + " Delete", @briefinfopiece, method: :delete, data: { confirm: 'Sure to delete?' } %></li>
+			<li class="divider"></li>
+			<table><tr><td>
+				<div class="info_area"></div>
+			</td></tr></table>
+			</ul>
+		</div>
+	</td>
+</tr>
+<tr height="42px">
+	<td colspan="2">
+		<div class="briefinfo_area" data-toggle="tooltip" title="<%= @briefinfopiece.content %>" onmouseup=<%="endTo(" + @briefinfopiece.id.to_s + ",0)" %> >
+			<%= @briefinfopiece.briefcontent %>
+		</div>
+	</td>
+</tr>		

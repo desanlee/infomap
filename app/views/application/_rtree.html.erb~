@@ -1,0 +1,10 @@
+<% if @rlinks != nil then %>
+	
+	<% @rlinks.each do |infolink| %>
+		<% @infopiece = infolink %>
+		<table class="span6 table-bordered infotable">
+		<%= render "infopiece" %>
+	</table>
+	<% end %>
+	
+<% end %>
