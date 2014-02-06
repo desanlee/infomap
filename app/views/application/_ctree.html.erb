@@ -1,9 +1,12 @@
 <% if @clinks != nil then %>
+<div class="row span3">
 	<% @clinks.each do |infolink| %>
 		<% @infopiece = infolink %>
-		<table class="span9 table-bordered infotable">
-		<%= render "infopiece" %>
-		</table>
+		<div name="cinfos"  id="<%= @infopiece.id %>">
+			<table  class=" table-bordered infotable">
+			<%= render "infopiece" %>
+			</table>
+		</div>
 	<% end %>
-	
+</div>	
 <% end %>

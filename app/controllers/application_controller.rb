@@ -58,25 +58,29 @@ class ApplicationController < ActionController::Base
   def treeindex
     
 	@infopieces = current_user.infopieces.find(:all, :conditions => " lcount=0 and rcount=0")
-    @newinfopiece = Infopiece.new
+	@newinfopiece = Infopiece.new
 	@infolink = Infolink.new
 	
 	
 	@rootpieces = current_user.infopieces.find(:all, :conditions => "lcount=0 and rcount!=0")
 	@infotree = buildroottree(@rootpieces, 0)
 	
+	@current_cinfo = nil
+	@current_linfo = nil
+	
+	#session[:test] = session[:cpiece] 
 	@current_cinfo = Infopiece.find_by_id(session[:cpiece]) if session[:cpiece] != nil
 	@current_cinfo = @rootpieces.first if @current_cinfo == nil
-	if ! @current_cinfo.frompieces.empty? then
+	if  @current_cinfo.lcount > 0 then
 		# selected info is not a root
 		@current_linfo = @current_cinfo.frompieces.first 
-		session[:test] = 11
+		#session[:test] = 11
 	else
 		# selected info is a root
 		@current_linfo = @current_cinfo
 		@current_cinfo = @current_linfo.topieces.first if !@current_linfo.topieces.empty?
 		session[:cpiece] = @current_cinfo.id
-		session[:test] = 22
+		#session[:test] = 22
 	end
 	
 	@lpieces = @current_cinfo.frompieces if @current_cinfo != nil
@@ -91,11 +95,19 @@ class ApplicationController < ActionController::Base
 	@rlinks = @current_cinfo.tolinks if @current_cinfo != nil
 	@clinks = @current_linfo.tolinks if @current_linfo != nil
 	
-
+	@newclink = Infolink.new
+	@newclink.frompiece_id = @current_linfo.id
+	@newrlink = Infolink.new
+	@newrlink.frompiece_id = @current_cinfo.id
+		
+	@rlinks = @rlinks + [@newrlink]
+	@clinks = @clinks +[@newclink] 
+	
   end
   
   def setcurrent
 	session[:cpiece] = params[:selectpiece]
+	session[:lpiece] = params[:parentpiece]
 	
 	redirect_to root_path
   end

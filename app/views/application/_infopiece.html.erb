@@ -1,5 +1,10 @@
 <% @infolink = @infopiece %>
-<% @infopiece = @infolink.topiece %>
+
+<% 
+	if @infolink.topiece != nil then 
+		@infopiece = @infolink.topiece
+%>
+
 <tr>
 	<td class="<%= 
 				'selected_area' if 
@@ -20,21 +25,22 @@
 			<i class="icon-resize-vertical"></i>			
 		</button>
 		<span onclick=<%="choseInfo(" + @infopiece.id.to_s  + ")"%> >
-			<<%= @infopiece.lcount %> ,
+<!--
+			<
+			<%= @infopiece.lcount %> ,
 			<%= @infopiece.rcount %>> ,
-			<%= @infopiece.created_at.to_date %>
+-->
+			<%= @infopiece.created_at.strftime("%Y-%m-%d") %>
 		</span>
 		<div class="btn-group left">
 			<a data-toggle="dropdown" href="#"><span class="caret"></span></a>
 			<ul class="dropdown-menu">
-			<li><a href="#NModal<%=@infopiece.id%>" data-toggle="modal"><i class="icon-plus"></i> New</a></li>
 			<li><a href="#EModal<%=@infopiece.id%>" data-toggle="modal"><i class="icon-pencil"></i> Edit</a></li>
 			<li><%= link_to  content_tag('i', nil, class: "icon-trash") + " Delete", @infopiece, method: :delete, data: { confirm: 'Sure to delete?' } %></li>
 			<% if @infolink.frompiece_id != 0 then %>
 				<li><%= link_to  content_tag('i', nil, class: "icon-remove") + " Unlink", @infolink, method: :delete, data: { confirm: 'Sure to unlink?' } %></li>
 			<% end %>
 			<li class="divider"></li>
-			<li><a href="#"><i class="i"></i> Make admin</a></li>
 			</ul>
 		</div>
 		<button 
@@ -45,30 +51,49 @@
 		</button>
 	</td>
 </tr>
-<tr class=" <%= 
+<tr 
+	class=" <%= 
 				'selected_area' if 
 					@infopiece == @current_cinfo or 
 					@infopiece == @current_linfo
-				%>" >
+	%>"
+>
 	<td  colspan="3" style="word-break:break-all">
 		
 		<div 
+			id="<%= if  @infopiece == @current_cinfo then 'cinfo' 
+				elsif  @infopiece == @current_linfo then 'linfo'
+				end
+				%>"
 			class="info_area" 
-			onmouseup=<%="endTo(" + @infopiece.id.to_s + "," + @infolink.id.to_s + ")" %> >
+			onmouseup=
+			<%=
+				if @infolink.id != nil then
+					"endTo(" + @infopiece.id.to_s + "," + @infolink.id.to_s + ")" 
+				else
+					"endTo(" + @infopiece.id.to_s + ",0)"
+				end
+			%>
+		>
 			<%= simple_format(@infopiece.content) %>
 		</div>
 	</td>
 </tr>
 
- 
+<% else
+	@infopiece = Infopiece.new %>
+	<tr><td>
+	<h4>&nbsp;<a href="#NModal<%=@infolink.frompiece_id%>" data-toggle="modal" class="label ">&nbsp+ ADD&nbspNew&nbsp</a>&nbsp;</h4>
+	</td></tr>
+		
 <!-- Modal -->
-<div id="NModal<%=@infopiece.id%>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="NModal<%=@infolink.frompiece_id%>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 		<h3 id="myModalLabel">Create New Info</h3>
 	</div>
 	<%= form_for(@newinfopiece) do |f| %>
-	  <%= f.hidden_field :lcount, value: @infopiece.id %>
+	  <%= f.hidden_field :lcount, value: @infolink.frompiece_id %>
 		<div class="center">
 			<%= f.text_area :content, :class => "appendpiecefield" %>
 		</div>
@@ -78,6 +103,9 @@
 		</div>
 	<% end %>
 </div>
+<% end %>
+
+<!-- Modal -->
 <div id="EModal<%=@infopiece.id%>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>

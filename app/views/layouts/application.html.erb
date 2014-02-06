@@ -10,9 +10,64 @@
 	<![endif]-->
 </head>
   
-  <body>
+  <body onload="init();">
   
   <script type="text/javascript" language="javascript">
+  
+  function drawLink(ctx, f, t)
+  {
+  	  var fx = f.offsetLeft, fy = f.offsetTop, fl = f.offsetWidth;
+  	  var tx = t.offsetLeft, ty = t.offsetTop;
+  	  
+  	  while(f=f.offsetParent) {
+  	  	  fx += f.offsetLeft;
+  	  	  fy += f.offsetTop;
+  	  }
+  	  while(t=t.offsetParent) {
+  	  	  tx += t.offsetLeft;
+  	  	  ty += t.offsetTop;
+  	  }
+  	  
+  	  //alert("fx:" + fx +",fy:" + fy + ",tx:" + tx + ",ty:" + ty)
+  	  ctx.moveTo(fx + fl - 15, fy)
+  	  ctx.lineTo(tx,ty + 15 )
+  	  ctx.stroke()
+  	  ctx.closePath()
+  }
+  
+  function init() {
+  	  var canvas = document.getElementById('canvas');
+  	  var contex = canvas.getContext('2d');
+  	  contex.strokeStyle = "pink"
+  	  
+  	  var linfo = document.getElementById('linfo');
+  	  var cinfo = document.getElementById('cinfo');
+  	  var cinfos = document.getElementsByName('cinfos');
+  	  var rinfos = document.getElementsByName('rinfos');
+  	  
+  	  if (linfo && cinfo) {
+  	  	  //alert(111);
+  	  	  for ( var i = 0; i < cinfos.length; i++) {
+  	  	  	  //alert("cinfos:" + cinfos[i].id);
+  	  	  	  drawLink(contex, linfo, cinfos[i]);
+  	  	  }
+  	  	  for (var i = 0; i < rinfos.length; i++) {
+  	  	  	  //alert("rinfos:"+i);
+  	  	  	  drawLink(contex, cinfo, rinfos[i]);
+  	  	  }
+  	  }
+  }
+  
+  function   getAbsPoint(e)      
+ {      /*
+    var   x   =   e.offsetLeft,   y   =   e.offsetTop;      
+    while(e=e.offsetParent)    
+    {    
+       x   +=   e.offsetLeft;      
+       y   +=   e.offsetTop;   
+    }    
+    alert("x:"+x+","+"y:"+y);      */
+ }
   
   function switchpoolstatus() {
 	$.get("/application/switchpoolstatus",function(){
@@ -28,7 +83,7 @@
   function moveFrom(linkid, infoid) {
 	// move info to new place, break original link
 	linkId = linkid;
-    toId = infoid;
+	toId = infoid;
 	fromId = 0;
   }
   function moveIndexFrom(linkid) {
@@ -40,8 +95,9 @@
 	toId = 0;
   }
   function endTo(id, tolinkid) {
-	//alert("endTo");
-	if (fromId == id || indexFromId == tolinkid) {
+	//alert("endTo(" + id + "," + tolinkid + ")") ;
+	if (fromId == id || (indexFromId == tolinkid && indexFromId != 0)) {
+		alert("useless");
 		linkId = 0
 		fromId = 0
 		toId = 0
@@ -53,8 +109,9 @@
 		//alert("switch from "+ indexFromId + "to" + tolinkid );
 		window.location.href="/infolink/switchlink?indexfromid=" + indexFromId + "&indextoid=" + tolinkid;
 	}
-	else if (fromId == 0) {
+	else if (fromId == 0 && tolinkid != 0) {
 		// this is a move operation
+		//alert("move from "+ toId + "to" + id + ", break link:" + linkId );
 		if(toId == 0 || id == 0) {
 			linkId = 0
 			fromId = 0
@@ -62,12 +119,15 @@
 			indexFromId = 0
 			return
 		}
-		//alert("move from "+ toId + "to" + id + ", break link:" + linkId );
 		window.location.href="/infolink/movelink?frominfoid=" + id + "&toinfoid=" + toId + "&breaklinkid=" + linkId;
 	} else if (toId == 0) {
 		//this is a reference operation
 		//alert("reference from " + fromId + " to" + id);
 		window.location.href="/infolink/buildlink?frominfoid=" + fromId + "&toinfoid=" + id;
+	} else if (tolinkid == 0) {
+		//this is a new connection creation
+		//alert("Create link from " +  id + " to" + toId);
+		window.location.href="/infolink/buildlink?frominfoid=" + id + "&toinfoid=" + toId;
 	}
 	linkId = 0
 	fromId = 0
@@ -101,18 +161,11 @@
  */
   
   </script>
-  
+ <canvas id="canvas" class="navbar-fixed-top" style="position:absolute;z-index:-1" width="1600" height="1200" ></canvas> 
     <header class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
         <div class="container-fluid">
           <%= link_to "INFO-MAP", '#', id: "logo" %>
-			<div class="btn-group">
-				<a data-toggle="dropdown" href="#"><span class="icon-comment icon-white"></span></a>
-				<ul class="dropdown-menu">
-				<li class="divider"></li>
-				<li><a href="#"><i class="i"></i> Make admin</a></li>
-				</ul>
-			</div>
 			
             <ul class="nav pull-right">
                          <% if current_user %>
@@ -130,8 +183,6 @@
       </div>
     </header>
 	<% if current_user then %>
-		<canvas id="canvas" style="position:absolute;z-index:-1" width="1600" height="1200" >
-		</canvas>
 		<div><%= render "pool" %></div>
 <!--		
 			<div class="span" data-spy="affix" style="overflow:auto; height: 500px; width: 100%"> 
@@ -141,7 +192,7 @@
 		</div>
 	<% end %>
     <div class="container toright">
-
+		
 <!--------------------
 
 		session expandinfo:<%= session[:expandinfo] %><br>
