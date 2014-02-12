@@ -1,12 +1,11 @@
-
 <% if @llinks != nil then if !@llinks.empty? then%>
 <div class="row span3">	
 	<% @llinks.each do |infolink| %>
 		<% @infopiece = infolink %>
-		<div class="span2">
-		<table class=" table-bordered infotable">
-			<%= render "infopiece" %>
-		</table>
+		<div class="span2" name="linfos" >
+			<table class=" table-bordered infotable">
+				<%= render "infopiece" %>
+			</table>
 		</div>
 	<br> 
 	<% end %>

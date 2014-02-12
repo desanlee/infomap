@@ -49,9 +49,17 @@
 }
 
 .selected_area {
-	margin-bottom: 10px;
-	background-color: khaki;
-	font-size: 1.2em;
+	background-color: AliceBlue;
+	font-weight: bold;
+	color: darkblue;
+}
+
+.normal_area {
+	background-color: AliceBlue;
+}
+
+.leaf_area {
+	background-color: CCFFCC;
 }
 
 .bordered {

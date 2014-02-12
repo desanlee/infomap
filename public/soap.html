@@ -3,42 +3,50 @@
       <title>Trebuchet Demo</title>
 	  <script type="text/javascript" src="/physics_game/Box2dWeb-2.1.a.3.js"></script>
 	  <script type="text/javascript" src="/physics_game/materials.js"></script>
-	  <script type="text/javascript" src="/physics_game/trebuchet.js"></script>
    </head>
    <body onload="init();">
-      <canvas id="canvas" width="1000" height="400" style="background-color:#333333;" ></canvas>
+      <canvas id="canvas" width="800" height="600" style="background-color:#333333;" ></canvas>
    </body>
    
    <script type="text/javascript">
       
-	  var scale = 4;
-	  var scaleflag = false;
-	  var dowblescaleflag = false;
-	  var wwidth = 1000; var wheight = 400;
-	  var angle = 225;
+	  var wwidth = 800; var wheight = 600;
 	  
 	  var canvas = document.getElementById('canvas');
 	  var ctx=canvas.getContext("2d");
 	  ctx.font="20px Georgia";
 	  
       function init() {
-		 scaleflag = false;
 	  
          var world = new b2World(
-               new b2Vec2(0, 10)    //gravity
+               new b2Vec2(0, 30)    //gravity
             ,  true                 //allow sleep
          );
 
 		 var worldSize = new b2Vec2(wwidth, wheight);
-		 
-		 treb = buildTreb(world, new b2Vec2(3, (wheight) / 30)); 
-					
+		 	
          //create ground
          fixDef.shape = new b2PolygonShape;
-		 //define horizon
-         fixDef.shape.SetAsBox(10000 / 30, 0.1);
+		 
+         fixDef.shape.SetAsBox(wwidth / 30, 0.1);
 		 bodyDef.position.Set(0, worldSize.y / 30);
 		 world.CreateBody(bodyDef).CreateFixture(fixDef);
+		 bodyDef.position.Set(0, 0);
+		 world.CreateBody(bodyDef).CreateFixture(fixDef);
+		 
+		 fixDef.shape.SetAsBox(0.1, wheight / 30);
+		 bodyDef.position.Set(worldSize.x / 30, 0);
+		 world.CreateBody(bodyDef).CreateFixture(fixDef);
+		 bodyDef.position.Set(0, 0);
+		 world.CreateBody(bodyDef).CreateFixture(fixDef);
+		 
+		 //create soap
+		 fixWood.shape = new b2CircleShape(0.8);
+		 dBodyDef.position = new b2Vec2(10, 2);
+		 soap = world.CreateBody(dBodyDef);
+		 soap.CreateFixture(fixWood);
+		 
+		 //create hand
 		 
          /////////////////////////////////////////////////////////////////////////
          //setup debug draw
@@ -56,18 +64,12 @@
          window.setInterval(update, 1000 / 60);
          
 		 //keyboard
-		 var keyU, keyD, keyL, keyR;
+		 var keyL;
 		 
 		 document.addEventListener("keydown", function(e){			
 			switch (e.keyCode) {
 				case 37 :
 					keyL=true;
-					break;
-				case 38 :
-					keyU=true;
-					break;
-				case 39 :
-					keyR=true;
 					break;
 			}
 		 });
@@ -76,12 +78,6 @@
 			switch (e.keyCode) {
 				case 37 :
 					keyL=false;
-					break;
-				case 38 :
-					keyU=false;
-					break;
-				case 39 :
-					keyR=false;
 					break;
 			}
 		 });
@@ -134,31 +130,10 @@
          //update
          var bodycount = 0;
          function update() {
-			if(hand.GetAngle() * 180/3.14 > angle) {
-				world.DestroyJoint(handPower);
-			}
-			if((hand.GetPosition().y < 0 || hand.GetPosition().x > 30 )&& scaleflag == false) {
-				scaleflag = true;
-				debugDraw.SetDrawScale(30/scale);
-				np = new b2Vec2;
-				for(var b = world.GetBodyList(); b != null; b = b.GetNext()){
-					bodycount += 1;
-					np.SetV(b.GetPosition());
-					np.y = np.y + (wheight / 30) * (scale - 1);
-					b.SetPosition(np);	
-				}
-			}
-			
 			if(keyL) {
 				//treb.ApplyForce(new b2Vec2(0,-100), treb.GetWorldCenter());
 				world.DestroyJoint(handPower);
-			}
-			if(keyU) {
-				rockerCtl.ApplyForce(new b2Vec2(150,-150), rockerCtl.GetWorldCenter());
-			}
-			if(keyR) {
-				//treb.ApplyForce(new b2Vec2(0,-1000), treb.GetWorldCenter());
-			}			
+			}	
             if(isMouseDown && (!mouseJoint)) {
                var body = getBodyAtMouse();
                if(body) {
@@ -186,12 +161,6 @@
             world.DrawDebugData();
 			
 			ctx.fillText("I Like This Game! ",10,50);
-			for(var b = world.GetBodyList(); b != null; b = b.GetNext()){
-				if (b.GetPosition().x > 10 ) {
-					np.SetV(b.GetPosition());
-					ctx.fillText( Math.floor(np.x) + " Meters",np.x * 30 / scale, np.y * 30 / scale);	
-				}
-			}
 				
             world.ClearForces();
          };

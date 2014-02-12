@@ -19,8 +19,8 @@
 				<i class=" icon-resize-horizontal"></i>
 			</button>
 			<span 
-				onmouseup=<%="endTo(" + @infopiece[:content].id.to_s + ", 0)" %>
-				onclick=<%="choseInfo(" + @infopiece[:content].id.to_s  + ")"%>
+				onmouseup=<%="endTo(" + @infopiece[:content].id.to_s + ",0)" %>
+				onclick=<%="choseInfo(" + @infopiece[:content].id.to_s  + ")" %>
 			>
 				    <span data-toggle="tooltip" title="<%= @infopiece[:content].content %>"><%= @infopiece[:content].shortcontent %></span>
 			</span>

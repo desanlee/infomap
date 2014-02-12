@@ -7,9 +7,9 @@
 
 <tr>
 	<td class="<%= 
-				'selected_area' if 
-					@infopiece == @current_cinfo or 
-					@infopiece == @current_linfo
+				if @infopiece == @current_cinfo or @infopiece == @current_linfo then 'selected_area' 
+				elsif @infopiece.rcount == 0 then 'leaf_area' 
+				else 'normal_area' end
 				%> minitext center">
 		<button 
 			class="toleft btn-hidden" 
@@ -30,7 +30,7 @@
 			<%= @infopiece.lcount %> ,
 			<%= @infopiece.rcount %>> ,
 -->
-			<%= @infopiece.created_at.strftime("%Y-%m-%d") %>
+			<%= @infopiece.created_at.strftime("%y-%m-%d") %>
 		</span>
 		<div class="btn-group left">
 			<a data-toggle="dropdown" href="#"><span class="caret"></span></a>
@@ -53,9 +53,9 @@
 </tr>
 <tr 
 	class=" <%= 
-				'selected_area' if 
-					@infopiece == @current_cinfo or 
-					@infopiece == @current_linfo
+				if @infopiece == @current_cinfo or @infopiece == @current_linfo then 'selected_area' 
+				elsif @infopiece.rcount == 0 then 'leaf_area' 
+				else 'normal_area' end
 	%>"
 >
 	<td  colspan="3" style="word-break:break-all">
@@ -113,6 +113,8 @@
 	</div>
 	<%= form_for(@infopiece) do |f| %>
 		<div class="center">
+			lcount:<%= f.number_field :lcount%><br>
+			rcount:<%= f.number_field :rcount%><br>
 			<%= f.text_area :content, :class => "appendpiecefield" %>
 		</div>
 		<div class="modal-footer">

@@ -74,7 +74,12 @@ class ApplicationController < ActionController::Base
 	if  @current_cinfo.lcount > 0 then
 		# selected info is not a root
 		@current_linfo = @current_cinfo.frompieces.first 
-		#session[:test] = 11
+		if @current_linfo == nil then
+			# if selected info is mistakenly a root
+			@current_linfo = @current_cinfo
+			@current_cinfo = @current_linfo.topieces.first if !@current_linfo.topieces.empty?
+			session[:cpiece] = @current_cinfo.id
+		end
 	else
 		# selected info is a root
 		@current_linfo = @current_cinfo

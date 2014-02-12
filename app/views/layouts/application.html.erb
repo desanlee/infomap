@@ -29,8 +29,8 @@
   	  }
   	  
   	  //alert("fx:" + fx +",fy:" + fy + ",tx:" + tx + ",ty:" + ty)
-  	  ctx.moveTo(fx + fl - 15, fy)
-  	  ctx.lineTo(tx,ty + 15 )
+  	  ctx.moveTo(fx + fl - 15, fy + 10)
+  	  ctx.lineTo(tx + 15,ty + 15 )
   	  ctx.stroke()
   	  ctx.closePath()
   }
@@ -42,18 +42,23 @@
   	  
   	  var linfo = document.getElementById('linfo');
   	  var cinfo = document.getElementById('cinfo');
+	  var linfos = document.getElementsByName('linfos');
   	  var cinfos = document.getElementsByName('cinfos');
   	  var rinfos = document.getElementsByName('rinfos');
   	  
   	  if (linfo && cinfo) {
   	  	  //alert(111);
-  	  	  for ( var i = 0; i < cinfos.length; i++) {
-  	  	  	  //alert("cinfos:" + cinfos[i].id);
-  	  	  	  drawLink(contex, linfo, cinfos[i]);
-  	  	  }
+		  for ( var i = 0; i < linfos.length; i++) {
+			//alert("linfos");
+			drawLink(contex, linfos[i], cinfo);
+		  }
+//  	  	  for ( var i = 0; i < cinfos.length; i++) {
+  	  	  	//alert("cinfos:" + cinfos[i].id);
+//  	  	  	drawLink(contex, linfo, cinfos[i]);
+//  	  	  }
   	  	  for (var i = 0; i < rinfos.length; i++) {
-  	  	  	  //alert("rinfos:"+i);
-  	  	  	  drawLink(contex, cinfo, rinfos[i]);
+  	  	  	//alert("rinfos:"+i);
+  	  	  	drawLink(contex, cinfo, rinfos[i]);
   	  	  }
   	  }
   }
@@ -97,7 +102,7 @@
   function endTo(id, tolinkid) {
 	//alert("endTo(" + id + "," + tolinkid + ")") ;
 	if (fromId == id || (indexFromId == tolinkid && indexFromId != 0)) {
-		alert("useless");
+		//alert("useless");
 		linkId = 0
 		fromId = 0
 		toId = 0

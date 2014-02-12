@@ -27,39 +27,41 @@ class InfopiecesController < ApplicationController
   # POST /infopieces
   def create
     @infopiece = Infopiece.new(params[:infopiece])
-	@infopiece.user_id = current_user.id
-	newlink = nil
-	parentpiece = nil
-	if @infopiece.lcount != nil then
-		parentpiece = Infopiece.find(@infopiece.lcount)
-		newlink = Infolink.new
-		newlink.frompiece_id = @infopiece.lcount
+
+	@multilines = @infopiece.content.split("===")
+	@multilines.each do |mc| 
+		newinfo = Infopiece.new
+		newinfo.user_id = current_user.id
+		newinfo.content = mc.chomp
+		
+		newlink = nil
+		parentpiece = nil
+		if @infopiece.lcount != nil then
+			parentpiece = Infopiece.find(@infopiece.lcount)
+			newlink = Infolink.new
+			newlink.frompiece_id = @infopiece.lcount
+		end
+		
+		newinfo.lcount = 0
+		newinfo.rcount = 0
+	
+
+		  if newinfo.save
+			if newlink then
+				newlink.topiece_id = newinfo.id
+				newlink.save
+				newlink.index_id = newlink.created_at
+				newlink.save
+				
+				newinfo.lcount += 1
+				parentpiece.rcount += 1
+				newinfo.save
+				parentpiece.save
+			end
+		  end
 	end
 	
-	@infopiece.lcount = 0
-	@infopiece.rcount = 0
-	
-    respond_to do |format|
-      if @infopiece.save
-		if newlink then
-			newlink.topiece_id = @infopiece.id
-			newlink.save
-			newlink.index_id = newlink.created_at
-			newlink.save
-			
-			@infopiece.lcount += 1
-			parentpiece.rcount += 1
-			@infopiece.save
-			parentpiece.save
-		end
-        format.html { redirect_to :back, notice: 'Infopiece was successfully created.' }
-        format.json { render json: @infopiece, status: :created, location: @infopiece }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @infopiece.errors, status: :unprocessable_entity }
-      end
-    end
-	
+	redirect_to :back
   end
 
   # PUT /infopieces/1
