@@ -21,8 +21,11 @@
 		 var fixAir = new b2FixtureDef;
          fixAir.density = 0.01;	fixAir.friction = 6.5;	fixAir.restitution = 0.2;		 
 		 
+		 var fixSoap = new b2FixtureDef;
+         fixSoap.density = 0.1;	fixSoap.friction = 0.1;	fixSoap.restitution = 0;
+		 
 		 var fixWood = new b2FixtureDef;
-         fixWood.density = 0.5;	fixWood.friction = 6.5;	fixWood.restitution = 0.2;
+         fixWood.density = 0.01;	fixWood.friction = 0.1;	fixWood.restitution = 0;
 		 
 		 var fixStone = new b2FixtureDef;
          fixStone.density = 1.0;	fixStone.friction = 6;	fixStone.restitution = 0.2;

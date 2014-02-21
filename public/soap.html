@@ -1,4 +1,4 @@
-<html>
+﻿<html>
    <head>
       <title>Trebuchet Demo</title>
 	  <script type="text/javascript" src="/physics_game/Box2dWeb-2.1.a.3.js"></script>
@@ -16,10 +16,12 @@
 	  var ctx=canvas.getContext("2d");
 	  ctx.font="20px Georgia";
 	  
+	  var hand, thumb, palm, thumbJ, palmJ;
+	
       function init() {
 	  
          var world = new b2World(
-               new b2Vec2(0, 30)    //gravity
+               new b2Vec2(0, 10)    //gravity
             ,  true                 //allow sleep
          );
 
@@ -28,25 +30,29 @@
          //create ground
          fixDef.shape = new b2PolygonShape;
 		 
-         fixDef.shape.SetAsBox(wwidth / 30, 0.1);
+         fixDef.shape.SetAsBox(wwidth / 30, 0.2);
 		 bodyDef.position.Set(0, worldSize.y / 30);
 		 world.CreateBody(bodyDef).CreateFixture(fixDef);
 		 bodyDef.position.Set(0, 0);
 		 world.CreateBody(bodyDef).CreateFixture(fixDef);
 		 
-		 fixDef.shape.SetAsBox(0.1, wheight / 30);
+		 fixDef.shape.SetAsBox(0.2, wheight / 30);
 		 bodyDef.position.Set(worldSize.x / 30, 0);
 		 world.CreateBody(bodyDef).CreateFixture(fixDef);
 		 bodyDef.position.Set(0, 0);
 		 world.CreateBody(bodyDef).CreateFixture(fixDef);
 		 
 		 //create soap
-		 fixWood.shape = new b2CircleShape(0.8);
 		 dBodyDef.position = new b2Vec2(10, 2);
 		 soap = world.CreateBody(dBodyDef);
+		 fixWood.shape = new b2CircleShape(0.6);
+		 fixWood.shape.SetLocalPosition(new b2Vec2(0, -0.3))
 		 soap.CreateFixture(fixWood);
-		 
-		 //create hand
+		 fixWood.shape.SetLocalPosition(new b2Vec2(0, 0.3))
+		 soap.CreateFixture(fixWood);
+		 fixWood.shape = new b2PolygonShape;
+		 fixWood.shape.SetAsBox(0.6, 0.3);
+		 soap.CreateFixture(fixWood);
 		 
          /////////////////////////////////////////////////////////////////////////
          //setup debug draw
@@ -85,18 +91,22 @@
          //mouse
          var mouseX, mouseY, mousePVec, isMouseDown, selectedBody, mouseJoint;
          var canvasPosition = getElementPosition(document.getElementById("canvas"));
-
+         
+		 document.addEventListener("mousemove", function(e) {
+            handleMouseMove(e);
+         }, true);
+		 
          document.addEventListener("mousedown", function(e) {
             isMouseDown = true;
-            handleMouseMove(e);
-            document.addEventListener("mousemove", handleMouseMove, true);
+            //handleMouseMove(e);
+            //document.addEventListener("mousemove", handleMouseMove, true);
          }, true);
          
          document.addEventListener("mouseup", function() {
-            document.removeEventListener("mousemove", handleMouseMove, true);
+            //document.removeEventListener("mousemove", handleMouseMove, true);
             isMouseDown = false;
-            mouseX = undefined;
-            mouseY = undefined;
+            //mouseX = undefined;
+            //mouseY = undefined;
          }, true);
          
          function handleMouseMove(e) {
@@ -130,37 +140,49 @@
          //update
          var bodycount = 0;
          function update() {
-			if(keyL) {
-				//treb.ApplyForce(new b2Vec2(0,-100), treb.GetWorldCenter());
-				world.DestroyJoint(handPower);
-			}	
-            if(isMouseDown && (!mouseJoint)) {
-               var body = getBodyAtMouse();
-               if(body) {
+			if(thumbJ && palmJ) {
+				if(keyL) {
+					//treb.ApplyForce(new b2Vec2(0,-100), treb.GetWorldCenter());
+					thumbJ.SetMotorSpeed(10);
+					palmJ.SetMotorSpeed(-10);
+				} else {
+					thumbJ.SetMotorSpeed(-10);
+					palmJ.SetMotorSpeed(10);
+				}
+			}
+            if(isMouseDown) {
+				if(!hand) {
+					createHand();
+				} else {
+					thumbJ.SetMotorSpeed(10);
+					palmJ.SetMotorSpeed(-10);
+				} 
+			} else {
+				if(hand) {
+					thumbJ.SetMotorSpeed(-10);
+					palmJ.SetMotorSpeed(10);
+				}
+			}
+			if(!mouseJoint) {
+               //var body = getBodyAtMouse();
+               if(hand) {
                   var md = new b2MouseJointDef();
                   md.bodyA = world.GetGroundBody();
-                  md.bodyB = body;
+                  md.bodyB = hand;
                   md.target.Set(mouseX, mouseY);
                   md.collideConnected = true;
-                  md.maxForce = 300.0 * body.GetMass();
+                  md.maxForce = 30000;
                   mouseJoint = world.CreateJoint(md);
-                  body.SetAwake(true);
+                  hand.SetAwake(true);
                }
-            }
-            
-            if(mouseJoint) {
-               if(isMouseDown) {
-                  mouseJoint.SetTarget(new b2Vec2(mouseX, mouseY));
-               } else {
-                  world.DestroyJoint(mouseJoint);
-                  mouseJoint = null;
-               }
+            }else {
+                mouseJoint.SetTarget(new b2Vec2(mouseX, mouseY));
             }
 			
             world.Step(1 / 60, 10, 10);
             world.DrawDebugData();
 			
-			ctx.fillText("I Like This Game! ",10,50);
+			ctx.fillText("千万别让肥皂掉地上啊！",10,50);
 				
             world.ClearForces();
          };
@@ -186,7 +208,75 @@
             }
             return {x: x, y: y};
          }
-
+		
+		function createHand() {
+			//create hand (hand + thumb + palm)
+			 handP = new b2Vec2(mouseX, mouseY);
+			 dBodyDef.position = new b2Vec2(mouseX, mouseY);
+			 
+			 dBodyDef.fixedRotation = true;
+			 hand = world.CreateBody(dBodyDef);
+			 fixWood.shape = new b2CircleShape(0.1);
+			 fixWood.shape.SetLocalPosition(new b2Vec2(-0.7, 0))
+			 hand.CreateFixture(fixWood);
+			 fixWood.shape.SetLocalPosition(new b2Vec2(0.7, 0))
+			 hand.CreateFixture(fixWood);
+			 
+			 //Thumb
+			 thumbJP = new b2Vec2;
+			 thumbJP.SetV(handP);
+			 thumbJP.x -= 0.7;
+			 dBodyDef.fixedRotation = false;
+			 dBodyDef.position.SetV(thumbJP);
+			 thumb = world.CreateBody(dBodyDef);
+			 fixWood.shape = new b2PolygonShape;
+			 fixWood.shape.SetAsArray([
+				new b2Vec2(-0.1, 0.1),
+				new b2Vec2(-0.1, -1.2),
+				new b2Vec2(0.1, -1.2),
+				new b2Vec2(0.1, 0.1)
+			 ])
+			 thumb.CreateFixture(fixWood);
+			 
+			 //Palm
+			 palmJP = new b2Vec2;
+			 palmJP.SetV(handP);
+			 palmJP.x += 0.7;
+			 dBodyDef.fixedRotation = false;
+			 dBodyDef.position.SetV(palmJP);
+			 palm = world.CreateBody(dBodyDef);
+			 fixWood.shape = new b2PolygonShape;
+			 fixWood.shape.SetAsArray([
+				new b2Vec2(-0.1, 0.1),
+				new b2Vec2(-0.1, -1.6),
+				new b2Vec2(0.1, -1.6),
+				new b2Vec2(0.1, 0.1)
+			 ])
+			 palm.CreateFixture(fixWood);
+					 
+			 revoluteJointDef = new b2RevoluteJointDef();
+			 revolutePoint = new b2Vec2;
+		
+			 revolutePoint.SetV(thumbJP);
+			 revoluteJointDef.Initialize(hand,thumb,revolutePoint);
+			 revoluteJointDef.enableLimit = true;
+			 revoluteJointDef.enableMotor = true;
+			 revoluteJointDef.maxMotorTorque = 100;
+			 revoluteJointDef.motorSpeed = -6;
+			 revoluteJointDef.lowerAngle = 315 * 6.28 / 360;
+			 revoluteJointDef.upperAngle = 390 * 6.28 / 360;
+			 thumbJ = world.CreateJoint(revoluteJointDef);
+			 
+			 revolutePoint.SetV(palmJP);
+			 revoluteJointDef.Initialize(hand,palm,revolutePoint);
+			 revoluteJointDef.enableLimit = true;
+			 revoluteJointDef.enableMotor = true;
+			 revoluteJointDef.maxMotorTorque = 100;
+			 revoluteJointDef.motorSpeed = 6;
+			 revoluteJointDef.lowerAngle = 345 * 6.28 / 360;
+			 revoluteJointDef.upperAngle = 390 * 6.28 / 360;
+			 palmJ = world.CreateJoint(revoluteJointDef);
+		}
 
       };
    
