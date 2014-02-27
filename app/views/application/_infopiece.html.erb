@@ -41,6 +41,7 @@
 				<li><%= link_to  content_tag('i', nil, class: "icon-remove") + " Unlink", @infolink, method: :delete, data: { confirm: 'Sure to unlink?' } %></li>
 			<% end %>
 			<li class="divider"></li>
+				<li><%= link_to  content_tag('i', nil, class: "icon-remove") + " Wikitable", controller: :infopieces, action: :wikitable, id: @infopiece, level: "4" %></li>
 			</ul>
 		</div>
 		<button 

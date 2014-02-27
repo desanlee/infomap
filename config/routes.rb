@@ -1,6 +1,7 @@
 Infomap::Application.routes.draw do
 
   get '/infopieces/:id', to: 'infopieces#new'
+  get '/infopieces/:id/wikitable', to: 'infopieces#wikitable'
   
   resources :infolinks
   resources :infopieces

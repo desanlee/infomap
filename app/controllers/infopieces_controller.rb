@@ -1,4 +1,11 @@
 class InfopiecesController < ApplicationController
+
+  # GET /infopieces/1/wikitable?level=4
+  def wikitable
+	@infopiece = Infopiece.find(params[:id])
+	render :layout => "justapage"
+  end
+  
   # GET /infopieces
   def index
     @infopieces = current_user.infopieces

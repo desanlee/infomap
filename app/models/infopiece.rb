@@ -28,5 +28,18 @@ class Infopiece < ActiveRecord::Base
   def htmlcontent
 	return self.content.gsub("\r\n",'<br>').gsub("\r",'<br>')
   end
+  
+  def twikitable
+	string = ""
+	if self.rcount == 0 then
+		string = "|" + self.htmlcontent + "\r\n"
+	else
+		string = "| rowspan=" + self.rcount.to_s + '" |' + self.htmlcontent
+		self.topieces.each do |cp|
+			string = string + cp.twikitable
+		end
+	end
+	return string
+  end
 
 end
