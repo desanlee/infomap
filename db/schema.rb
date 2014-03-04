@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140126090521) do
+ActiveRecord::Schema.define(:version => 20140304123521) do
 
   create_table "infolinks", :force => true do |t|
     t.integer  "frompiece_id"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20140126090521) do
     t.datetime "updated_at", :null => false
     t.integer  "lcount"
     t.integer  "rcount"
+    t.string   "labelstr"
   end
 
   create_table "users", :force => true do |t|

@@ -58,6 +58,7 @@ class ApplicationController < ActionController::Base
   def treeindex
     
 	@infopieces = current_user.infopieces.find(:all, :conditions => " lcount=0 and rcount=0")
+	@infopiecescount = @infopieces.count if @infopieces != nil
 	@newinfopiece = Infopiece.new
 	@infolink = Infolink.new
 	

@@ -19,10 +19,18 @@
 		</div>
 	</td>
 </tr>
+<% if @infopiecescount < 17 %>
 <tr height="42px">
+<% else %>
+<tr height="21px">
+<% end %>
 	<td colspan="2">
 		<div class="info_area" data-toggle="tooltip" title="<%= @briefinfopiece.content %>" onmouseup=<%="endTo(" + @briefinfopiece.id.to_s + ",0)" %> >
-			<%= @briefinfopiece.briefcontent %>
+			<% if @infopiecescount < 17 %>
+				<%= @briefinfopiece.briefcontent %>
+			<% else %>
+				<%= @briefinfopiece.halfbriefcontent %>
+			<% end %>
 		</div>
 	</td>
 </tr>		
