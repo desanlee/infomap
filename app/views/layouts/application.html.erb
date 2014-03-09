@@ -1,5 +1,9 @@
 <head>
     <title>INFO-MAP - Take care of your info of mess!</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+	
     <%= stylesheet_link_tag "application", media: "all" %>
     <%= javascript_include_tag "application" %>
         <%= javascript_include_tag "defaults" %>
@@ -40,24 +44,32 @@
   	  var contex = canvas.getContext('2d');
   	  contex.strokeStyle = "pink"
   	  
-  	  var linfo = document.getElementById('linfo');
-  	  var cinfo = document.getElementById('cinfo');
-	  var linfos = document.getElementsByName('linfos');
-  	  var cinfos = document.getElementsByName('cinfos');
-  	  var rinfos = document.getElementsByName('rinfos');
+  	  var linfo = document.getElementById('linfo1');
+  	  var cinfo = document.getElementById('cinfo1');
+	  var linfos = document.getElementsByName('linfos1');
+  	  var cinfos = document.getElementsByName('cinfos1');
+  	  var rinfos = document.getElementsByName('rinfos1');
   	  
   	  if (linfo && cinfo) {
-  	  	  //alert(111);
 		  for ( var i = 0; i < linfos.length; i++) {
-			//alert("linfos");
 			drawLink(contex, linfos[i], cinfo);
 		  }
-//  	  	  for ( var i = 0; i < cinfos.length; i++) {
-  	  	  	//alert("cinfos:" + cinfos[i].id);
-//  	  	  	drawLink(contex, linfo, cinfos[i]);
-//  	  	  }
   	  	  for (var i = 0; i < rinfos.length; i++) {
-  	  	  	//alert("rinfos:"+i);
+  	  	  	drawLink(contex, cinfo, rinfos[i]);
+  	  	  }
+  	  }
+	  
+	  linfo = document.getElementById('linfo2');
+  	   cinfo = document.getElementById('cinfo2');
+	   linfos = document.getElementsByName('linfos2');
+  	   cinfos = document.getElementsByName('cinfos2');
+  	   rinfos = document.getElementsByName('rinfos2');
+  	  
+  	  if (linfo && cinfo) {
+		  for ( var i = 0; i < linfos.length; i++) {
+			drawLink(contex, linfos[i], cinfo);
+		  }
+  	  	  for (var i = 0; i < rinfos.length; i++) {
   	  	  	drawLink(contex, cinfo, rinfos[i]);
   	  	  }
   	  }
@@ -140,9 +152,8 @@
 	indexFromId = 0
   }
 
-  
-  function choseInfo(cid, pid) {
-	window.location.href="/application/setcurrent?selectpiece=" + cid + "&parentpiece=" + pid;
+  function choseInfo(cid, page) {
+	window.location.href="/application/setcurrent?selectpiece" + page + "=" + cid;
   }
   
   function expandInfo(infoid) {
@@ -173,19 +184,17 @@
         </div>
       </div>
     </header>
-	<% if current_user then %>
-		<div><%= render "pool" %></div>
-<!--		
-			<div class="span" data-spy="affix" style="overflow:auto; height: 500px; width: 100%"> 
--->
-			<div class="span4">
+<!--
+	<% if current_user then %>		
+		<div class="span" data-spy="affix" style="overflow:auto; height: 500px; width: 100%"> 
+
+		<div class="span4">
 			<%= render "application/roottree" %>
 		</div>
 	<% end %>
-    <div class="container toright">
-		
-<!--------------------
+-->	
 
+<!--------------------
 		session expandinfo:<%= session[:expandinfo] %><br>
 		session test:<%= session[:test] %><br>
 		session cpiece:<%= session[:cpiece] %><br>
@@ -193,9 +202,16 @@
 		@current_cinfo:<%= @current_cinfo.id if @current_cinfo != nil %><br>
 		@current_linfo:<%= @current_linfo.id if @current_linfo != nil %><br>
 ----------------------->
+
+	<% if current_user then %>
+		<div><%= render "pool" %></div>
+		<hr>
+	<% end %>
 	
-      <%= yield %>
+    <div class="container-fluid" id="main">	
+		<%= yield %>
     </div>
+
 	
 	<!-- Modal -->
 	<% if current_user then %>

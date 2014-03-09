@@ -24,12 +24,7 @@
 			>
 			<i class="icon-resize-vertical"></i>			
 		</button>
-		<span onclick=<%="choseInfo(" + @infopiece.id.to_s  + ")"%> >
-<!--
-			<
-			<%= @infopiece.lcount %> ,
-			<%= @infopiece.rcount %>> ,
--->
+		<span onclick=<%="choseInfo(" + @infopiece.id.to_s  + "," + @page + ")"%> >
 			<%= @infopiece.created_at.strftime("%y-%m-%d") %>
 		</span>
 		<div class="btn-group left">
@@ -62,8 +57,15 @@
 	<td  colspan="3" style="word-break:break-all">
 		
 		<div 
-			id="<%= if  @infopiece == @current_cinfo then 'cinfo' 
-				elsif  @infopiece == @current_linfo then 'linfo'
+			id="<%= 
+				if @page == "1" then
+					if  @infopiece == @current_cinfo then 'cinfo1' 
+					elsif  @infopiece == @current_linfo then 'linfo1'
+					end
+				else
+					if  @infopiece == @current_cinfo then 'cinfo2' 
+					elsif  @infopiece == @current_linfo then 'linfo2'
+					end
 				end
 				%>"
 			class="info_area" 
@@ -76,7 +78,7 @@
 				end
 			%>
 		>
-			<%= simple_format(@infopiece.content) %>
+			<span data-toggle="tooltip" title="<%= @infopiece.content %>"><%= @infopiece.briefcontent %></span>			
 		</div>
 	</td>
 </tr>
@@ -84,10 +86,10 @@
 <% else
 	@infopiece = Infopiece.new %>
 	<tr><td>
-	<h4>&nbsp;<a href="#NModal<%=@infolink.frompiece_id%>" data-toggle="modal" class="label ">&nbsp+ ADD&nbspNew&nbsp</a>&nbsp;</h4>
+	<h4>&nbsp;<a href="#NModal<%=@infolink.frompiece_id%>" data-toggle="modal" class="label ">&nbsp+ NEW&nbsp</a>&nbsp;</h4>
 	</td></tr>
 		
-<!-- Modal -->
+<!-- Modal for New Info-->
 <div id="NModal<%=@infolink.frompiece_id%>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
@@ -106,7 +108,7 @@
 </div>
 <% end %>
 
-<!-- Modal -->
+<!-- Modal for Edit Info-->
 <div id="EModal<%=@infopiece.id%>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>

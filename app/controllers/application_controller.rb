@@ -62,58 +62,87 @@ class ApplicationController < ActionController::Base
 	@newinfopiece = Infopiece.new
 	@infolink = Infolink.new
 	
-	
 	@rootpieces = current_user.infopieces.find(:all, :conditions => "lcount=0 and rcount!=0")
-	@infotree = buildroottree(@rootpieces, 0)
+	# @infotree = buildroottree(@rootpieces, 0)
 	
-	@current_cinfo = nil
-	@current_linfo = nil
+	#########################################
+	@llinks1 = Array.new
+	@clinks1 = Array.new
+	@rlinks1 = Array.new
+	@currentinfo1 = Array.new
+	buildmap(@llinks1, @clinks1, @rlinks1, @currentinfo1, session[:cpiece1])
 	
-	#session[:test] = session[:cpiece] 
-	@current_cinfo = Infopiece.find_by_id(session[:cpiece]) if session[:cpiece] != nil
-	@current_cinfo = @rootpieces.first if @current_cinfo == nil
-	if  @current_cinfo.lcount > 0 then
-		# selected info is not a root
-		@current_linfo = @current_cinfo.frompieces.first 
-		if @current_linfo == nil then
-			# if selected info is mistakenly a root
-			@current_linfo = @current_cinfo
-			@current_cinfo = @current_linfo.topieces.first if !@current_linfo.topieces.empty?
-			session[:cpiece] = @current_cinfo.id
-		end
-	else
-		# selected info is a root
-		@current_linfo = @current_cinfo
-		@current_cinfo = @current_linfo.topieces.first if !@current_linfo.topieces.empty?
-		session[:cpiece] = @current_cinfo.id
-		#session[:test] = 22
-	end
-	
-	@lpieces = @current_cinfo.frompieces if @current_cinfo != nil
-	
-	@llinks = Array.new
-	@lpieces.each do |p| 
-		tmplink = Infolink.new
-		tmplink.frompiece_id = 0
-		tmplink.topiece_id = p.id
-		@llinks << tmplink
-	end
-	@rlinks = @current_cinfo.tolinks if @current_cinfo != nil
-	@clinks = @current_linfo.tolinks if @current_linfo != nil
-	
-	@newclink = Infolink.new
-	@newclink.frompiece_id = @current_linfo.id
-	@newrlink = Infolink.new
-	@newrlink.frompiece_id = @current_cinfo.id
-		
-	@rlinks = @rlinks + [@newrlink]
-	@clinks = @clinks +[@newclink] 
+	@llinks2 = Array.new
+	@clinks2 = Array.new
+	@rlinks2 = Array.new
+	@currentinfo2 = Array.new
+	buildmap(@llinks2, @clinks2, @rlinks2, @currentinfo2, session[:cpiece2])
 	
   end
   
+  def buildmap(llinks, clinks, rlinks, currentinfo, session_c)
+	current_cinfo = nil
+	current_linfo = nil
+	
+	if session_c != nil
+		current_cinfo = Infopiece.find_by_id(session_c) 
+	end
+	if current_cinfo == nil 
+		current_cinfo = @rootpieces.first
+	end
+	if  current_cinfo.lcount > 0 then
+		# selected info is not a root
+		if current_cinfo.frompieces.first != nil then
+			current_linfo = current_cinfo.frompieces.first 
+		else
+			# if selected info is mistakenly a root
+			current_linfo = current_cinfo
+			current_cinfo = current_linfo.topieces.first if !current_linfo.topieces.empty?
+			session_c = current_cinfo.id
+		end
+	else
+		# selected info is a root
+		current_linfo = current_cinfo
+		current_cinfo = current_linfo.topieces.first if !current_linfo.topieces.empty?
+		session_c = current_cinfo.id
+		#session[:test] = 22
+	end
+	
+	lpieces = current_cinfo.frompieces if current_cinfo != nil
+	
+	
+	lpieces.each do |p| 
+		tmplink = Infolink.new
+		tmplink.frompiece_id = 0
+		tmplink.topiece_id = p.id
+		llinks << tmplink
+	end
+	if current_cinfo != nil 
+		current_cinfo.tolinks.each do |l|
+			rlinks << l
+		end
+	end
+	if current_linfo != nil
+		current_linfo.tolinks.each do |l|
+			clinks << l
+		end
+	end
+	 
+	
+	newclink = Infolink.new
+	newclink.frompiece_id = current_linfo.id
+	newrlink = Infolink.new
+	newrlink.frompiece_id = current_cinfo.id
+		
+	rlinks << newrlink
+	clinks << newclink 
+	currentinfo << current_cinfo
+	currentinfo << current_linfo
+  end
+  
   def setcurrent
-	session[:cpiece] = params[:selectpiece]
-	session[:lpiece] = params[:parentpiece]
+	session[:cpiece1] = params[:selectpiece1] if params[:selectpiece1] != nil
+	session[:cpiece2] = params[:selectpiece2] if params[:selectpiece2] != nil
 	
 	redirect_to root_path
   end

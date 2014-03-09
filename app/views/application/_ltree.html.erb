@@ -1,13 +1,14 @@
-<% if @llinks != nil then if !@llinks.empty? then%>
-<div class="row span3">	
-	<% @llinks.each do |infolink| %>
-		<% @infopiece = infolink %>
-		<div class="span2" name="linfos" >
-			<table class=" table-bordered infotable">
-				<%= render "infopiece" %>
-			</table>
-		</div>
-	<br> 
+<% if @llinks != nil then %>
+	<% if !@llinks.empty? then%>
+		<% @llinks.each do |infolink| %>
+			<% @infopiece = infolink %>
+				<table class="infotable" name="linfos<%= @page %>">
+					<%= render "infopiece" %>
+				</table>
+		<% end %>
+	<% else %>
+		<h3>Empty</h3>
 	<% end %>
-</div>	
-<% end end %>
+<% else %>
+	<h3>Null</h3>
+<% end %>

@@ -1,8 +1,12 @@
-
-<% if @infotree != nil then %>	
-	<% @infotree.each do |infopiece| %>
+<div data-toggle="collapse" data-target=<%= "#rootmenu" + @page %> >
+    <h3>MAP <%= @page %></h3>
+</div>
+     
+<div id=<%= "rootmenu" + @page %> class="collapse out">
+	<br>
+	Root Info List:
+	<% @rootpieces.each do |infopiece| %>
 		<% @infopiece = infopiece %>
 		<%= render "rootpiece" %>
 	<% end %>
-	
-<% end %>
+</div>

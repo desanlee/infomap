@@ -34,23 +34,24 @@
 .infotable {
   margin-left: 0px;
   margin-top: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 6px;
   padding: 0px;
 }
 
 .info_area {
 	padding: 2px;
-	font-size: 1.0em;
+	font-size: 1.1em;
 }
 
 .briefinfo_area {
-	padding: 2px;
-	font-size: 0.8em;
+	padding: 0px;
+	font-size: 1em;
 }
 
 .selected_area {
 	background-color: BurlyWood ;
 	font-weight: bold;
+	font-size: 1.2em;
 	color: darkblue;
 }
 

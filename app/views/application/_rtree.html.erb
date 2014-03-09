@@ -1,14 +1,14 @@
 <% if @rlinks != nil then %>
-<div class="row span5">	
-	<% @rlinks.each do |infolink| %>
-		<% @infopiece = infolink %>
-		
-		<div name="rinfos">
-			<table class=" table-bordered infotable">
+	<% if !@rlinks.empty? then %>
+		<% @rlinks.each do |infolink| %>
+			<% @infopiece = infolink %>
+			<table class=" infotable" name="rinfos<%= @page %>">
 				<%= render "infopiece" %>
 			</table>
-		<div>
-		
+		<% end %>
+	<% else %>
+		<h3>Empty</h3>
 	<% end %>
-</div>	
+<% else %>
+	<h3>Null</h3>
 <% end %>

@@ -1,21 +1,45 @@
-<div class="row">
-		<div class="row" onmoveend="init()">
-		<!--
-			<div class="span12">
-				current_linfo: <%= @current_linfo.id if @current_linfo != nil%><br>
-				current_cinfo: <%= @current_cinfo.id if @current_cinfo != nil%>
-			</div>
-		-->
-		
-		<div class="span3">
-			<%= render "ltree" %>
-		</div>
-		<div class="span3">
-			<%= render "ctree" %>
-		</div>
-		<div class="span5 ">
-			<%= render "rtree" %>
-		</div>
-				
-		</div>
+<div class="row-fluid">
+
+	<!---------- Define the vars for the left page --------->
+	<% 
+		@page = "1" 
+		@llinks = @llinks1
+		@clinks = @clinks1
+		@rlinks = @rlinks1
+		@current_cinfo = @currentinfo1[0]
+		@current_linfo = @currentinfo1[1]
+	%>
+	<div class="span2">
+		<%= render "roottree" %>
+		<br>
+		<%= render "ltree" %>
+	</div>
+	<div class="span2">
+		<%= render "ctree" %>
+	</div>
+	<div class="span2">
+		<%= render "rtree" %>
+	</div>
+
+	<!---------- Define the vars for the right page --------->
+	<% 
+		@page = "2" 
+		@llinks = @llinks2
+		@clinks = @clinks2
+		@rlinks = @rlinks2
+		@current_cinfo = @currentinfo2[0]
+		@current_linfo = @currentinfo2[1]
+	%>
+	<div class="span2">
+		<%= render "roottree" %>
+		<br>
+		<%= render "ltree" %>
+	</div>
+	<div class="span2">
+		<%= render "ctree" %>
+	</div>
+	<div class="span2">
+		<%= render "rtree" %>
+	</div>		
+	
 </div>

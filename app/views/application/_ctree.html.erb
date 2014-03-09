@@ -1,12 +1,14 @@
 <% if @clinks != nil then %>
-<div class="row span3">
-	<% @clinks.each do |infolink| %>
-		<% @infopiece = infolink %>
-		<div name="cinfos"  id="<%= @infopiece.id %>">
-			<table  class=" table-bordered infotable">
-			<%= render "infopiece" %>
+	<% if !@clinks.empty? then %>
+		<% @clinks.each do |infolink| %>
+			<% @infopiece = infolink %>
+			<table  class="infotable" name="cinfos<%= @page %>"  id="<%= @infopiece.id %>">
+				<%= render "infopiece" %>
 			</table>
-		</div>
+		<% end %>
+	<% else %>
+		<h3>Empty</h3>
 	<% end %>
-</div>	
+<% else %>
+	<h3>Null</h3>
 <% end %>

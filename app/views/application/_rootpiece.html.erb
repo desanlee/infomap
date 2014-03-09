@@ -1,27 +1,9 @@
-
-		<div class="info_area" >
-			<% @infopiece[:deepth].times do %>..<% end %>
-			<% if @infopiece[:content].rcount == 0 then %>
-				<span><i class="icon-ban-circle icon-mini"></i></span>
-			<% else %>
-				<span onclick=<%="expandInfo(" + @infopiece[:content].id.to_s  + ")"%> >
-					<% if @expandinfo.include? @infopiece[:content].id.to_s then %>
-						<i class="icon-minus"></i>
-					<% else %>
-						<i class="icon-plus"></i>
-					<% end %>
-				</span>
-			<% end %>
-			<button 
-				class="btn-hidden" 
-				onmousedown=<%="refFrom(" + @infopiece[:content].id.to_s + ")" %> 
-				 >
-				<i class=" icon-resize-horizontal"></i>
-			</button>
-			<span 
-				onmouseup=<%="endTo(" + @infopiece[:content].id.to_s + ",0)" %>
-				onclick=<%="choseInfo(" + @infopiece[:content].id.to_s  + ")" %>
-			>
-				    <span data-toggle="tooltip" title="<%= @infopiece[:content].content %>"><%= @infopiece[:content].shortcontent %></span>
-			</span>
-		</div>
+<div class="info_area" >
+	<span 
+		class="label label-success"
+		onmouseup=<%="endTo(" + @infopiece.id.to_s + ",0)" %>
+		onclick=<%="choseInfo(" + @infopiece.id.to_s  + "," + @page + ")"%>
+	>
+		<span data-toggle="tooltip" title="<%= @infopiece.content %>"><%= @infopiece.shortcontent %></span>
+	</span>
+</div>
