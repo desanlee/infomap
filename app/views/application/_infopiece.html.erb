@@ -78,7 +78,8 @@
 				end
 			%>
 		>
-			<span data-toggle="tooltip" title="<%= @infopiece.content %>"><%= @infopiece.briefcontent %></span>			
+			<!-- <span data-toggle="tooltip" title="<%= @infopiece.content %>"><%= @infopiece.briefcontent %></span> -->	
+			<span><%= simple_format(@infopiece.content) %></span>
 		</div>
 	</td>
 </tr>
