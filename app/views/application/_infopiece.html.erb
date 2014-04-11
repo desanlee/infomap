@@ -6,7 +6,7 @@
 %>
 
 <tr>
-	<td class="<%= 
+	<td class="span1 <%= 
 				if @infopiece == @current_cinfo or @infopiece == @current_linfo then 'selected_area' 
 				elsif @infopiece.rcount == 0 then 'leaf_area' 
 				else 'normal_area' end
